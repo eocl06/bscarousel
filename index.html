@@ -125,14 +125,19 @@
       border-radius: var(--carousel-radius);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       margin: 32px 0;
+      -webkit-tap-highlight-color: transparent; /* Mobilde dokunma vurgusunu kaldırır */
     }
     .carousel-inner {
       display: flex;
-      transition: transform 0.5s ease-in-out;
+      /* transition: transform 0.5s ease-in-out; JS TARAFI KONTROL EDECEK */
       user-select: none;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
+      cursor: grab; /* Kaydırma imkanı olduğunu belirtir */
+    }
+    .carousel-inner.is-dragging {
+      cursor: grabbing;
     }
     .carousel-slide {
       min-width: 100%;
@@ -145,6 +150,7 @@
       height: auto;
       display: block;
       border-radius: 0;
+      pointer-events: none; /* Resimlerin sürüklenmesini engeller */
     }
     .carousel-slide .caption {
       padding: 12px 16px 35px 16px; 
@@ -159,7 +165,7 @@
       z-index: 1;
     }
 
-    /* Carousel Kontrol Butonları - YUMUŞATILDI */
+    /* Carousel Kontrol Butonları */
     .carousel-controls {
       position: absolute;
       top: 50%;
@@ -167,49 +173,61 @@
       display: flex;
       justify-content: space-between;
       transform: translateY(-50%);
-      padding: 0 15px; /* Kenarlara biraz daha yakın olabilir */
-      pointer-events: none; /* Butonlar dışında tıklamayı engellemez */
-      z-index: 3; /* En üstte */
-      opacity: 0; /* Normalde gizli */
+      padding: 0 15px;
+      pointer-events: none;
+      z-index: 3;
+      opacity: 0; /* Başlangıçta gizli */
       transition: opacity 0.3s ease-in-out;
     }
 
-    .carousel:hover .carousel-controls {
-      opacity: 1; /* Carousel üzerine gelince görünür */
+    /* Masaüstü için hover davranışı */
+    @media (hover: hover) and (pointer: fine) {
+      .carousel:hover .carousel-controls {
+        opacity: 1;
+      }
     }
 
+    /* Mobil için dokunmayla göster/gizle sınıfı */
+    .carousel-controls.mobile-visible {
+      opacity: 1;
+      pointer-events: auto; /* Görünür olduğunda tıklanabilir */
+    }
+    .carousel-controls.mobile-visible button {
+        pointer-events: all; /* Butonlar her zaman tıklanabilir olmalı (eğer parent görünürse) */
+    }
+
+
     .carousel-controls button {
-      pointer-events: all; /* Butonlar tıklanabilir */
-      background: rgba(0, 0, 0, 0.15); /* Çok hafif koyu arka plan */
-      color: rgba(255, 255, 255, 0.85); /* Yarı şeffaf beyaz ok */
+      pointer-events: all;
+      background: rgba(0, 0, 0, 0.15);
+      color: rgba(255, 255, 255, 0.85);
       border: none;
-      width: 36px; /* Biraz daha küçük */
-      height: 36px; /* Biraz daha küçük */
-      border-radius: 50%; /* Dairesel form */
-      font-size: 1.1rem; /* Ok ikonu boyutu */
-      font-weight: bold; /* İkonun net görünmesi için */
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 1.1rem;
+      font-weight: bold;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
-      box-shadow: none; /* Gölge yok */
+      box-shadow: none;
     }
 
     .carousel-controls button:hover {
-      background: rgba(0, 0, 0, 0.35); /* Hover'da biraz daha belirgin arka plan */
-      color: #fff; /* Tam beyaz ok */
-      transform: scale(1.1); /* Hafif büyüme efekti */
+      background: rgba(0, 0, 0, 0.35);
+      color: #fff;
+      transform: scale(1.1);
     }
 
-    /* Carousel Noktaları Stilleri */
     .carousel-dots {
       position: absolute;
       bottom: 0;
       left: 0;
       right: 0;
       text-align: center;
-      z-index: 2; /* Altyazının üzerinde, kontrollerin altında */
+      z-index: 2;
       padding: 8px 0;
     }
     .carousel-dot {
@@ -264,7 +282,7 @@
     . Kekiniz en iyi kıvama ulaştığında fırınınızı otomatik kapatan <strong data-slide="2">PerfectBake Plus</strong>
     ’a ne demeli?</p>
     
-    <div class="image-block carousel">
+    <div class="image-block carousel" id="myCarousel">
       <div class="carousel-inner">
         <div class="carousel-slide">
           <img src="https://static.bundle.app/studio/d3f80cfe-48f3-4036-8a12-71aeabc64514/af31b54a-9191-4d35-9a84-92df6cdc204a.png" alt="3D Fry">
@@ -305,18 +323,26 @@
     });
 
     // Carousel Script
-    const carousel = document.querySelector('.carousel');
-    const carouselInner = document.querySelector('.carousel-inner');
-    const carouselSlides = document.querySelectorAll('.carousel-slide');
+    const carousel = document.getElementById('myCarousel'); // ID eklendi
+    const carouselInner = carousel.querySelector('.carousel-inner');
+    const carouselControls = carousel.querySelector('.carousel-controls');
+    const carouselSlides = carousel.querySelectorAll('.carousel-slide');
     const totalCarouselSlides = carouselSlides.length;
     let currentCarouselIndex = 0;
 
-    const dotsContainer = document.querySelector('.carousel-dots');
+    const dotsContainer = carousel.querySelector('.carousel-dots');
     let dots = [];
 
+    // Swipe Değişkenleri
+    let isDragging = false;
     let touchStartX = 0;
-    let touchEndX = 0;
-    const swipeThreshold = 50; 
+    let currentTranslate = 0;
+    let startTranslate = 0; // Kaydırmaya başlarkenki transform değeri (px)
+    const swipeThreshold = 50; // Min. kaydırma mesafesi
+    const slideWidth = () => carousel.offsetWidth; // Dinamik slide genişliği
+
+    // Dokunmatik cihaz tespiti
+    const isTouchDevice = () => ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
     function updateDots() {
       if (!dotsContainer) return;
@@ -328,32 +354,47 @@
       });
     }
 
-    function showCarouselSlide(index) {
+    function setTransform(translateX) {
+        carouselInner.style.transform = `translateX(${translateX}px)`;
+    }
+    
+    function showCarouselSlide(index, animate = true) {
       if (index >= totalCarouselSlides) {
-        currentCarouselIndex = totalCarouselSlides - 1;
+        index = totalCarouselSlides - 1;
       } else if (index < 0) {
-        currentCarouselIndex = 0;
-      } else {
-        currentCarouselIndex = index;
+        index = 0;
       }
+      currentCarouselIndex = index;
       
-      const offset = -currentCarouselIndex * 100;
-      if (carouselInner) {
-        carouselInner.style.transform = `translateX(${offset}%)`;
+      const targetTranslate = -currentCarouselIndex * slideWidth();
+      
+      if (animate) {
+        carouselInner.style.transition = 'transform 0.4s ease-out'; // Yumuşak geçiş
+      } else {
+        carouselInner.style.transition = 'none'; // Sürüklerken anlık değişim
+      }
+      setTransform(targetTranslate);
+      currentTranslate = targetTranslate; // Mevcut pozisyonu güncelle
+
+      // Animasyon bittikten sonra (eğer varsa) transition'ı temizle
+      if (animate) {
+        // Transition'ın gerçekten bitmesini beklemek yerine, anlık olarak temizleyebiliriz
+        // veya bir timeout kullanabiliriz. Şimdilik bu şekilde bırakalım.
       }
       updateDots();
     }
 
-    const prevButton = document.querySelector('.carousel .prev');
-    const nextButton = document.querySelector('.carousel .next');
+
+    const prevButton = carousel.querySelector('.carousel .prev');
+    const nextButton = carousel.querySelector('.carousel .next');
 
     if (prevButton && nextButton && carouselInner) {
       prevButton.addEventListener('click', () => {
-        showCarouselSlide((currentCarouselIndex - 1 + totalCarouselSlides) % totalCarouselSlides);
+        showCarouselSlide(currentCarouselIndex - 1);
       });
 
       nextButton.addEventListener('click', () => {
-        showCarouselSlide((currentCarouselIndex + 1) % totalCarouselSlides);
+        showCarouselSlide(currentCarouselIndex + 1);
       });
     }
 
@@ -382,30 +423,110 @@
       });
     });
     
+    // Swipe ve Mobil Tap Eventleri
     if (carouselInner) {
       carouselInner.addEventListener('touchstart', (event) => {
-        touchStartX = event.changedTouches[0].screenX;
-      }, { passive: true });
+        if (event.touches.length > 1) return; // Birden fazla parmakla dokunmayı yoksay
+        isDragging = true;
+        touchStartX = event.touches[0].clientX;
+        startTranslate = currentTranslate; // Mevcut transform değerini al
+        carouselInner.style.transition = 'none'; // Sürüklerken animasyonu kapat
+        carouselInner.classList.add('is-dragging');
+      }, { passive: true }); // Dikey scroll'u engellememek için true kalabilir, agresif yanal sürüklemede sorun olursa false yapıp preventDefault eklenebilir.
+
+      carouselInner.addEventListener('touchmove', (event) => {
+        if (!isDragging || event.touches.length > 1) return;
+        const touchCurrentX = event.touches[0].clientX;
+        const deltaX = touchCurrentX - touchStartX;
+        currentTranslate = startTranslate + deltaX;
+        setTransform(currentTranslate);
+      });
 
       carouselInner.addEventListener('touchend', (event) => {
-        touchEndX = event.changedTouches[0].screenX;
-        handleSwipe();
+        if (!isDragging) return;
+        isDragging = false;
+        carouselInner.classList.remove('is-dragging');
+        carouselInner.style.transition = 'transform 0.4s ease-out'; // Bırakınca animasyonu aç
+
+        const deltaX = currentTranslate - startTranslate; // Toplam sürükleme mesafesi
+
+        if (Math.abs(deltaX) > swipeThreshold) {
+          if (deltaX < 0) { // Sola kaydırma (sonraki slayt)
+            showCarouselSlide(currentCarouselIndex + 1);
+          } else { // Sağa kaydırma (önceki slayt)
+            showCarouselSlide(currentCarouselIndex - 1);
+          }
+        } else {
+          // Eşiği geçmedi, mevcut slayta geri dön
+          showCarouselSlide(currentCarouselIndex);
+        }
+      });
+      
+      carouselInner.addEventListener('touchcancel', () => {
+          if (!isDragging) return;
+          isDragging = false;
+          carouselInner.classList.remove('is-dragging');
+          carouselInner.style.transition = 'transform 0.4s ease-out';
+          showCarouselSlide(currentCarouselIndex); // İptal durumunda mevcut slayta dön
       });
     }
 
-    function handleSwipe() {
-      const deltaX = touchEndX - touchStartX;
-      if (Math.abs(deltaX) > swipeThreshold) {
-        if (deltaX > 0) { 
-          showCarouselSlide(currentCarouselIndex - 1);
-        } else { 
-          showCarouselSlide(currentCarouselIndex + 1);
+    // Mobil cihazlarda carousel'e tıklayınca kontrolleri göster/gizle
+    if (isTouchDevice() && carousel && carouselControls) {
+      // Masaüstü hover'ını CSS ile yöneteceğiz, JS ile müdahale etmeyelim
+      // Sadece dokunmatik cihazlarda tap için ek işlevsellik
+      let controlsTimer; // Kontrolleri otomatik gizlemek için zamanlayıcı
+
+      const showControlsTemporarily = () => {
+        carouselControls.classList.add('mobile-visible');
+        carouselControls.style.pointerEvents = 'auto'; // Tıklanabilir yap
+
+        clearTimeout(controlsTimer); // Önceki zamanlayıcıyı temizle
+        controlsTimer = setTimeout(() => {
+          carouselControls.classList.remove('mobile-visible');
+          // Opacity transition'ı bittikten sonra pointer-events'i none yapmak daha iyi olabilir,
+          // ama şimdilik anlık gizleme için böyle bırakalım.
+          // CSS'te .carousel-controls.mobile-visible için pointer-events:auto tanımladık.
+        }, 3000); // 3 saniye sonra gizle
+      };
+      
+      // Carousel'e genel bir tap alanı (resimlerin olduğu alan)
+      carouselInner.addEventListener('click', (event) => {
+         // Eğer sürükleme sonrası bir click ise (bazen olur), veya butonlara/noktalara tıklandıysa işlem yapma
+        if (Math.abs(currentTranslate - startTranslate) > 10) { // Küçük bir sürükleme toleransı
+            return;
         }
-      }
+        if (event.target.closest('.carousel-controls button') || event.target.closest('.carousel-dot')) {
+          return;
+        }
+        
+        // Kontrolleri toggle etme yerine, dokununca geçici gösterelim
+        if (!carouselControls.classList.contains('mobile-visible')) {
+            showControlsTemporarily();
+        } else {
+            // Zaten görünürse ve tekrar iç alana tıklanırsa gizleyebiliriz veya süreyi uzatabiliriz
+            // Şimdilik dokunulduğunda hep süreyi başlatsın
+             showControlsTemporarily();
+        }
+      });
+
+      // Butonlara tıklandığında süreyi sıfırla/uzat
+      [prevButton, nextButton].forEach(button => {
+        if (button) {
+            button.addEventListener('click', () => {
+                if (carouselControls.classList.contains('mobile-visible')) {
+                    showControlsTemporarily(); // Süreyi yeniden başlat
+                }
+            });
+        }
+      });
+
     }
 
+
+    // Başlangıçta ilk slaydı ve aktif noktayı göster
     if (totalCarouselSlides > 0) {
-      showCarouselSlide(currentCarouselIndex);
+      showCarouselSlide(currentCarouselIndex, false); // Başlangıçta animasyonsuz
     }
   </script>
 </body>
