@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="tr-TR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fırınsız Bir Mutfak?</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fefefe;
+      --text: #111827;
+      --muted: #6b7280;
+      --accent: #d2151c;
+      --accent-bg: #ffeaea;
+      --font: 'Roboto', sans-serif;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 1.05rem;
+      line-height: 1.75;
+    }
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 4px;
+      width: 0;
+      background: linear-gradient(to right, #fca5a5, #dc2626);
+      border-radius: 2px;
+      box-shadow: 0 0 6px rgba(220, 38, 38, 0.3);
+      z-index: 1001;
+      transition: width 0.25s ease-out;
+    }
+    .container {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 16px 24px 32px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+      position: relative;
+    }
+    h1, h2 {
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 2.25rem;
+      font-family: 'Playfair Display', serif;
+    }
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 48px;
+    }
+    p {
+      margin-bottom: 20px;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+    }
+    p strong {
+  color: var(--text); /* Ana metin rengi ile uyumlu */
+  font-weight: 600;
+  background-color: transparent; /* Arka plan yok */
+  padding: 0 2px;
+  border-radius: 4px;
+  cursor: pointer;
+  position: relative;
+}
+
+p strong[data-tip] {
+  color: var(--accent); /* Sadece tooltip olanlar kırmızı */
+  background-color: var(--accent-bg); /* Hafif kırmızı zemin */
+  padding: 0 4px;
+}
+    }
+    .image-block {
+      margin: 32px 0;
+    }
+    .image-block img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    }
+    .caption {
+      text-align: center;
+      font-size: 0.875rem;
+      color: #9ca3af;
+      margin-top: 8px;
+    }
+    .button-wrapper {
+      text-align: center;
+      margin-top: 32px;
+    }
+    .button {
+      background-color: var(--accent);
+      color: white;
+      padding: 12px 32px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      text-decoration: none;
+      box-shadow: 0 2px 6px rgba(210, 21, 28, 0.2);
+      transition: all 0.3s ease;
+    }
+    .button:hover {
+      background-color: #a60f17;
+    }
+    .tooltip {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      border: 1px solid #d1d5db;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: var(--text);
+      max-width: 260px;
+      width: max-content;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" id="progress-bar"></div>
+  <div class="container">
+    <h1>Fırınsız Bir Mutfak Düşünebilir misiniz?</h1>
+    <div style="display: flex; align-items: center; gap: 8px; margin: 8px 0 24px 0;">
+  <div style="max-width: 75px; max-height: 75px; display: flex; align-items: center;">
+    <img src="https://static.bundle.app/studio/6dfae320-0320-4016-a9e4-9700faa6ca38/cbce22db-3bc2-45f1-bdc9-a588f16cfd14.png" alt="Bosch Logo" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+  </div>
+  <span style="font-size: 0.88rem; color: #4b5563; font-weight: 500;"> sponsorluğunda</span>
+</div>
+    <p>Kolay değil ama <strong>hadi hayal edelim</strong>; bugün kullandığımız <strong>elektrikli fırınlar</strong> 1896’da icat edilmemiş olsun. Ne yapardık?</p>
+    <p><strong>1834’te</strong> icat edilen gazlı fırınlara dönerdik. Diyelim o da kimsenin aklına gelmedi. O zaman <em>ne yapardık?</em></p>
+    <div class="image-block">
+      <img src="https://static.bundle.app/studio/5d88a525-ea48-43df-81c1-8a3640d71b4d/1a77be7d-d677-4e4f-8077-5581ceafdb66.png" alt="Elektrikli fırın">
+      <div class="caption">20.yy başlarından bir elektrikli fırın</div>
+    </div>
+    <p><strong>1700’lerde</strong> pek popüler olan <strong>dökme demir sobalar</strong> devreye girerdi.<strong>Resmi kayıtlarda</strong> yazılı ilk fırın 1490’larda, Fransa’da tuğladan üretilmiş. El mecbur, tuğla fırına dönüyoruz. Peki olmaz olmaz, ya o da icat edilmeseydi? İşte o biraz zor. Çünkü ilk kez yazılı kayıtlara geçmesi, <strong>tuğla fırınların</strong> MÖ 2500’lerden beri kullanıldığı gerçeğini değiştirmiyor. Mezopotamyalılara sevgilerimizle.</p>
+    <div class="image-block">
+      <img src="https://static.bundle.app/studio/5d88a525-ea48-43df-81c1-8a3640d71b4d/04422189-58d3-4c15-9ddf-fd05a21f4813.png" alt="Tuğla fırın">
+      <div class="caption">Roma İmparatorluğu döneminden kalma bir tuğla fırın</div>
+    </div>
+    <p>Peki ya Mezopotamyalılar <em>“Açık ateş neyimize yetmiyor?”</em> dese, tuğla fırına hiç zahmet etmeseydi? Biz de hayatımıza en az 5000 yıldır kullanılan <strong>tandır fırınları</strong> ile devam ederdik. Hindistan’dan Anadolu’ya geniş bir coğrafyada kullanılan bu fırın, büyük bir çukur açıp içini kille kaplayarak hazırlanıyordu. Bu kil fırına köz ve pişecek yemekler konuyordu. Hani bazı kebapçılarda taze lavaş yapılır; işte o fırının atası. <strong>Mucidi de Hintler.</strong></p>
+    <p>Tandır fırınını ilk düşünen Hintli dostumuz o gün başka bir şeyle meşgul olsaydı? Yeryüzü fırınlarına tamah edecektik el mecbur. <strong>30.000 yıl evvel</strong> atalarımız toprağı kazar, kızdırdıkları taşları çukura atar, yemeklerini yanmasın diye yapraklara sarıp taşların üzerine bırakır ve çukuru geri doldururmuş. Günümüzde bir testi yemek yapmak için çukur kazmak akıl alır gibi değil tabii.</p>
+    <h2>Peki ya günümüzün son teknolojileri?</h2>
+    <p>İyi ki insanlık mutfak çözümlerini geliştirmekten hiç vazgeçmedi. <strong data-tip="3D Fry, sıcak hava sirkülasyonu ile çok az yağla sağlıklı kızartma yapar." data-slide="0">3D Fry</strong>
+ mesela. Ya da yiyeceklerin besin değerlerini koruyan <strong data-tip="Steam Function Plus, yiyeceklerin içindeki vitamin ve mineralleri korur." data-slide="1">Steam Function Plus</strong>
+. Kekiniz en iyi kıvama ulaştığında fırınınızı otomatik kapatan <strong data-tip="PerfectBake Plus, kekin içindeki nemi ölçerek fırını en doğru anda otomatik kapatır." data-slide="2">PerfectBake Plus</strong>
+’a ne demeli?</p>
+    <div class="image-block carousel">
+  <div class="carousel-inner">
+    <div class="carousel-slide active">
+      <img src="https://static.bundle.app/studio/d3f80cfe-48f3-4036-8a12-71aeabc64514/af31b54a-9191-4d35-9a84-92df6cdc204a.png" alt="Elektrikli fırın">
+      <div class="caption">3D Fry sayesinde artık litrelerce yağ kullanmadan, mükemmel patates ve sebze kızartmaları yapmak oldukça pratik.</div>
+    </div>
+    <div class="carousel-slide">
+      <img src="https://static.bundle.app/studio/d3f80cfe-48f3-4036-8a12-71aeabc64514/fd0cebfe-b4c8-4e71-9d02-21f1bda27b50.png" alt="Steam Function">
+      <div class="caption">Steam Function Plus ile pişirme sıcaklığını 120°C'ye kadar yükselterek, yemeklerinizi daha hızlı bir şekilde pişirebilir.</div>
+    </div>
+    <div class="carousel-slide">
+      <img src="https://static.bundle.app/studio/d3f80cfe-48f3-4036-8a12-71aeabc64514/1eb33b93-f5e5-4160-82f6-6a9e33d1d0ea.png" alt="PerfectBake">
+      <div class="caption">PerfectBake özelliği sayesinde kolaylıkla mükemmel pişmiş ekmek, kek, kiş ve benzeri lezzetler hazırlayabilirsiniz.</div>
+    </div>
+  </div> <!-- .carousel-inner kapanışı -->
+
+  <div class="carousel-controls">
+    <button class="prev">&#8592;</button>
+    <button class="next">&#8594;</button>
+  </div>
+</div>
+
+
+<style>
+.carousel {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.carousel-inner {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+.carousel-slide.active {
+  display: flex;
+}
+
+.caption {
+  font-size: 0.95rem;
+  margin-top: 12px;
+  text-align: center;
+  color: var(--muted);
+}
+
+.carousel-controls {
+  position: absolute;
+  top: 46%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transform: translateY(-50%);
+  padding: 0 12px;
+  pointer-events: none; /* dış alanlara tıklanmasın */
+  z-index: 2;
+}
+
+.carousel-controls button {
+  pointer-events: all;
+  background: rgba(210, 21, 28, 0.4); /* yarı şeffaf kırmızı */
+  color: white;
+  border: none;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.carousel-controls button:hover {
+  background: rgba(210, 21, 28, 0.7);
+  transform: scale(1.1);
+}
+
+</style>
+
+<script>
+let currentIndex = 0;
+const slides = document.querySelectorAll('.carousel-slide');
+const totalSlides = slides.length;
+
+function showSlide(index) {
+  slides.forEach((slide, i) => {
+    slide.classList.remove('active');
+    if (i === index) {
+      slide.classList.add('active');
+    }
+  });
+}
+
+document.querySelector('.prev').addEventListener('click', () => {
+  currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+  showSlide(currentIndex);
+});
+
+document.querySelector('.next').addEventListener('click', () => {
+  currentIndex = (currentIndex + 1) % totalSlides;
+  showSlide(currentIndex);
+});
+</script>
+
+    <p><strong>Bosch’un Serie 8</strong> ankastre fırın ailesi; kendini temizleme, cep telefonundan kontrol gibi birçok yenilikle fırın tarihinde yeni bir sayfa açıyor.</p>
+   <div class="button-wrapper">
+      <a class="button" href="https://ad.doubleclick.net/ddm/trackclk/N2054846.3735144BUNDLEAPP/B32486569.406791996" target="_blank">Hemen Keşfet</a>
+  </div>
+  <div class="tooltip" id="tooltip"></div>
+  <script>
+    const tooltip = document.getElementById('tooltip');
+    document.querySelectorAll('[data-tip]').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        tooltip.textContent = el.dataset.tip;
+        tooltip.style.display = 'block';
+        const rect = el.getBoundingClientRect();
+        const offsetTop = rect.top + rect.height + window.scrollY + 6;
+        const offsetLeft = rect.left + (rect.width / 2) - 130;
+        tooltip.style.top = ${offsetTop}px;
+        const maxRight = offsetLeft + tooltip.offsetWidth;
+        const viewportWidth = window.innerWidth;
+        if (maxRight > viewportWidth - 20) {
+          tooltip.style.left = ${viewportWidth - tooltip.offsetWidth - 20}px;
+        } else if (offsetLeft < 20) {
+          tooltip.style.left = 20px;
+        } else {
+          tooltip.style.left = ${offsetLeft}px;
+        }
+      });
+      el.addEventListener('mouseleave', () => {
+        tooltip.style.display = 'none';
+      });
+    });
+
+    const progressBar = document.getElementById('progress-bar');
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = (scrollTop / docHeight) * 100;
+      progressBar.style.width = ${scrollPercent}%;
+    });
+  </script>
+<script>
+  let currentIndex = 0;
+  const slides = document.querySelectorAll('.carousel-slide');
+  const totalSlides = slides.length;
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.remove('active');
+      if (i === index) {
+        slide.classList.add('active');
+      }
+    });
+  }
+
+  document.querySelector('.prev').addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    showSlide(currentIndex);
+  });
+
+  document.querySelector('.next').addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    showSlide(currentIndex);
+  });
+</script>
+<script>
+  let currentIndex = 0;
+  const slides = document.querySelectorAll('.carousel-slide');
+  const totalSlides = slides.length;
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      slide.classList.remove('active');
+      if (i === index) {
+        slide.classList.add('active');
+      }
+    });
+  }
+
+  document.querySelector('.prev').addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    showSlide(currentIndex);
+  });
+
+  document.querySelector('.next').addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    showSlide(currentIndex);
+  });
+
+  // 🔻🔻🔻 Bunu EKLE 🔻🔻🔻
+  document.querySelectorAll('[data-slide]').forEach(el => {
+    el.addEventListener('click', () => {
+      const index = parseInt(el.getAttribute('data-slide'), 10);
+      if (!isNaN(index)) {
+        currentIndex = index;
+        showSlide(currentIndex);
+      }
+    });
+  });
+</script>
+</body>
+</html>
