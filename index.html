@@ -99,11 +99,8 @@
       color: #9ca3af;
       margin-top: 8px;
     }
-    .button-wrapper {
-      text-align: center;
-      margin-top: 32px;
-    }
-    .button {
+    /* .button-wrapper kaldırıldı, stilleri .unified-cta-block'a taşındı */
+    .button { /* Genel buton stili */
       background-color: var(--accent);
       color: white;
       padding: 12px 32px;
@@ -113,6 +110,7 @@
       text-decoration: none;
       box-shadow: 0 2px 6px rgba(210, 21, 28, 0.2);
       transition: all 0.3s ease;
+      display: inline-block; /* text-align:center ile ortalanabilmesi için */
     }
     .button:hover {
       background-color: #a60f17;
@@ -350,26 +348,33 @@
       display: none !important;
     }
 
-    /* CTA Metin Alanı Stili */
-    .cta-text-container {
-      text-align: center;
-      margin: 40px auto 20px auto; 
-      padding: 20px 25px;
-      background-color: #fff9f9; 
+    /* YENİ BİRLEŞİK CTA BLOĞU STİLLERİ */
+    .unified-cta-block {
+      background-color: var(--accent-bg); /* #ffeaea */
+      padding: 35px 30px;
       border-radius: var(--carousel-radius);
-      border-left: 5px solid var(--accent); 
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      margin: 40px auto 30px auto;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(210, 21, 28, 0.15); 
+      border-top: 4px solid var(--accent);
     }
-    .cta-text-container p {
-      font-family: 'Inter', sans-serif; 
-      font-size: 1.1rem; 
-      line-height: 1.75;
-      color: #333; 
-      margin-bottom: 0; 
+
+    .unified-cta-block .cta-text {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.15rem; 
+      line-height: 1.8;
+      color: var(--text); 
+      margin-bottom: 25px; 
     }
-    .cta-text-container strong {
+
+    .unified-cta-block .cta-text strong {
       color: var(--accent); 
-      font-weight: 600; 
+      font-weight: 700; 
+    }
+
+    .unified-cta-block .button.cta-button { /* .button stilini alır, gerekirse özel ayar */
+      font-size: 1rem; /* Buton metnini biraz büyüttük */
+      /* padding: 14px 35px; // Buton padding'i zaten .button'dan geliyor, gerekirse buradan ezin */
     }
 
   </style>
@@ -445,13 +450,11 @@
 
     <p><strong>Bosch’un Serie 8</strong> ankastre fırın ailesi; kendini temizleme, cep telefonundan kontrol gibi birçok yenilikle fırın tarihinde yeni bir sayfa açıyor.</p>
     
-    <div class="cta-text-container">
-      <p>Mutfakta <strong>devrim yaratan</strong> Bosch Serie 8 fırınlarla tanışın, hayalinizdeki lezzetlere bir adım daha yaklaşın! Teknolojinin ve tasarımın <strong>mükemmel uyumu</strong> şimdi sizi bekliyor.</p>
+    <div class="unified-cta-block">
+      <p class="cta-text">Mutfakta <strong>devrim yaratan</strong> Bosch Serie 8 fırınlarla tanışın, hayalinizdeki lezzetlere bir adım daha yaklaşın! Teknolojinin ve tasarımın <strong>mükemmel uyumu</strong> şimdi sizi bekliyor.</p>
+      <a class="button cta-button" href="https://ad.doubleclick.net/ddm/trackclk/N2054846.3735144BUNDLEAPP/B32486569.406791996" target="_blank">Hemen Keşfet</a>
     </div>
 
-    <div class="button-wrapper">
-      <a class="button" href="https://ad.doubleclick.net/ddm/trackclk/N2054846.3735144BUNDLEAPP/B32486569.406791996" target="_blank">Hemen Keşfet</a>
-    </div>
   </div>
 
   <script>
@@ -543,7 +546,7 @@
     
     carousel.addEventListener('mouseenter', stopCarouselAutoplay);
     carousel.addEventListener('mouseleave', () => {
-        if(!carouselControls.classList.contains('mobile-visible')) { // Sadece mobil kontroller aktif değilken başlat
+        if(!carouselControls.classList.contains('mobile-visible')) { 
             startCarouselAutoplay();
         }
     });
@@ -654,7 +657,7 @@
         clearTimeout(controlsTimer);
         controlsTimer = setTimeout(() => {
           carouselControls.classList.remove('mobile-visible');
-           if (!carousel.matches(':hover') && !manualNavTimeout) { // Eğer fare üzerinde değilse ve manuel zamanlayıcı yoksa başlat
+           if (!carousel.matches(':hover') && !manualNavTimeout) { 
              startCarouselAutoplay();
            }
         }, 3000);
