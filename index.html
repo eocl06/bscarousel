@@ -146,16 +146,20 @@
       display: block;
       border-radius: 0;
     }
-    .carousel-slide .caption { /* Carousel içindeki özel caption */
-      padding: 1px 16px;
+    .carousel-slide .caption {
+      padding: 12px 16px 35px 16px; 
       background-color: var(--carousel-accent-light);
       color: var(--carousel-text);
       font-size: 1rem;
       width: 100%;
       text-align: center;
-      border-radius: 0 0 var(--carousel-radius) var(--carousel-radius); /* Sadece alt köşeler yuvarlak */
-      margin-top: 0; /* Resimle bitişik olması için */
+      border-radius: 0 0 var(--carousel-radius) var(--carousel-radius);
+      margin-top: 0;
+      position: relative;
+      z-index: 1;
     }
+
+    /* Carousel Kontrol Butonları - YUMUŞATILDI */
     .carousel-controls {
       position: absolute;
       top: 50%;
@@ -163,64 +167,69 @@
       display: flex;
       justify-content: space-between;
       transform: translateY(-50%);
-      padding: 0 12px;
-      pointer-events: none;
-      z-index: 2;
+      padding: 0 15px; /* Kenarlara biraz daha yakın olabilir */
+      pointer-events: none; /* Butonlar dışında tıklamayı engellemez */
+      z-index: 3; /* En üstte */
+      opacity: 0; /* Normalde gizli */
+      transition: opacity 0.3s ease-in-out;
     }
+
+    .carousel:hover .carousel-controls {
+      opacity: 1; /* Carousel üzerine gelince görünür */
+    }
+
     .carousel-controls button {
-      pointer-events: all;
-      background: rgba(255, 255, 255, 0.85);
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      font-size: 1.2rem;
-      font-weight: bold;
+      pointer-events: all; /* Butonlar tıklanabilir */
+      background: rgba(0, 0, 0, 0.15); /* Çok hafif koyu arka plan */
+      color: rgba(255, 255, 255, 0.85); /* Yarı şeffaf beyaz ok */
+      border: none;
+      width: 36px; /* Biraz daha küçük */
+      height: 36px; /* Biraz daha küçük */
+      border-radius: 50%; /* Dairesel form */
+      font-size: 1.1rem; /* Ok ikonu boyutu */
+      font-weight: bold; /* İkonun net görünmesi için */
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease, color 0.3s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    .carousel-controls button:hover {
-      background: var(--accent);
-      color: #fff;
-      transform: scale(1.1) translateY(-50%); /* Dikey ortalamayı koru */
+      transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+      box-shadow: none; /* Gölge yok */
     }
 
-    /* Carousel Noktaları Stilleri - YENİDEN AYARLANDI */
+    .carousel-controls button:hover {
+      background: rgba(0, 0, 0, 0.35); /* Hover'da biraz daha belirgin arka plan */
+      color: #fff; /* Tam beyaz ok */
+      transform: scale(1.1); /* Hafif büyüme efekti */
+    }
+
+    /* Carousel Noktaları Stilleri */
     .carousel-dots {
       position: absolute;
-      /* Altyazının (caption) yaklaşık yüksekliği ~55-60px. 
-         Noktaların altyazının hemen üzerinde durması için bu değeri ayarlayın.
-         Örn: Altyazı 60px ise, noktalar için bottom: 65px veya 70px gibi bir değer. */
-      bottom: 60px; /* BU DEĞERİ KENDİ ALTYAZI YÜKSEKLİĞİNİZE GÖRE AYARLAYIN! */
+      bottom: 0;
       left: 0;
       right: 0;
       text-align: center;
-      z-index: 3; /* Kontrollerin üzerinde olabilir */
-      padding: 5px 0; /* Dikeyde kendi içinde biraz boşluk */
+      z-index: 2; /* Altyazının üzerinde, kontrollerin altında */
+      padding: 8px 0;
     }
     .carousel-dot {
       display: inline-block;
       width: 8px;
       height: 8px;
       margin: 0 4px;
-      background-color: rgba(255, 255, 255, 0.45); /* Yarı şeffaf beyaz */
+      background-color: rgba(0, 0, 0, 0.35); 
       border-radius: 50%;
       cursor: pointer;
-      border: none; /* Kenarlıksız, görsele daha yakın görünüm */
+      border: none;
       padding: 0;
       transition: background-color 0.3s ease, transform 0.2s ease;
     }
     .carousel-dot:hover {
-      background-color: rgba(255, 255, 255, 0.65); /* Hover'da biraz daha opak */
+      background-color: rgba(0, 0, 0, 0.5);
       transform: scale(1.1);
     }
     .carousel-dot.active {
-      background-color: rgba(255, 255, 255, 0.85); /* Aktif nokta daha opak beyaz */
+      background-color: var(--accent); 
       transform: scale(1.2);
     }
   </style>
