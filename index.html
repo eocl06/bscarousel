@@ -240,16 +240,31 @@
       transform: scale(1.2);
     }
 
-    /* ANKET STİLLERİ - Başlık İyileştirildi */
+    /* ANKET STİLLERİ */
     .survey-container {
       background-color: #f8f9fa;
       border: 1px solid #e9ecef;
       border-radius: var(--carousel-radius);
-      padding: 30px 25px;
+      padding: 35px 25px 30px 25px; /* Üst padding artırıldı */
       margin: 48px 0;
-      text-align: center;
+      text-align: center; 
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+      position: relative; 
     }
+
+    /* YENİ: Anket Sponsor Logosu Stili */
+    .survey-sponsor {
+      position: absolute;
+      top: 18px; /* Konteynerin üstünden boşluk */
+      right: 22px; /* Konteynerin sağından boşluk */
+    }
+
+    .survey-sponsor img {
+      max-width: 40px; /* Logo biraz daha büyük */
+      height: auto;
+      display: block; /* Tek başına resim için */
+    }
+    /* "sponsorluğunda" metni kaldırıldığı için span stili de kaldırıldı */
 
     .survey-container h3 {
       font-family: 'Playfair Display', serif;
@@ -258,6 +273,7 @@
       font-weight: 700;
       position: relative;
       padding-bottom: 12px;
+      margin-top: 0; 
       margin-bottom: 25px;
     }
 
@@ -336,6 +352,28 @@
       display: none !important;
     }
 
+    /* YENİ: CTA Metin Alanı Stili */
+    .cta-text-container {
+      text-align: center;
+      margin: 40px auto 20px auto; /* Üst ve alt boşluklar ayarlandı */
+      padding: 20px 25px;
+      background-color: #fff9f9; /* Çok hafif kırmızımsı/pembe arka plan */
+      border-radius: var(--carousel-radius);
+      border-left: 5px solid var(--accent); /* Sol tarafta belirgin vurgu çizgisi */
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    }
+    .cta-text-container p {
+      font-family: 'Inter', sans-serif; /* Ana metin fontuyla uyum */
+      font-size: 1.1rem; /* Biraz daha büyük */
+      line-height: 1.75;
+      color: #333; /* Ana metin renginden biraz daha yumuşak */
+      margin-bottom: 0; 
+    }
+    .cta-text-container strong {
+      color: var(--accent); /* Vurgu rengi */
+      font-weight: 600; /* Kalın ama aşırı değil */
+    }
+
   </style>
 </head>
 <body>
@@ -363,6 +401,9 @@
     <p>Tandır fırınını ilk düşünen Hintli dostumuz o gün başka bir şeyle meşgul olsaydı? Yeryüzü fırınlarına tamah edecektik el mecbur. <strong>30.000 yıl evvel</strong> atalarımız toprağı kazar, kızdırdıkları taşları çukura atar, yemeklerini yanmasın diye yapraklara sarıp taşların üzerine bırakır ve çukuru geri doldururmuş. Günümüzde bir testi yemek yapmak için çukur kazmak akıl alır gibi değil tabii.</p>
     
     <div class="survey-container" id="ovenSurvey">
+      <div class="survey-sponsor">
+        <img src="https://static.bundle.app/studio/6dfae320-0320-4016-a9e4-9700faa6ca38/cbce22db-3bc2-45f1-bdc9-a588f16cfd14.png" alt="Bosch Logosu">
+        </div>
       <h3>Anket: Fırınınız Olmasaydı...</h3>
       <p class="survey-question">Eğer evinizde modern bir fırınınız olmasaydı, en çok hangi tür yemeği yapmayı özlerdiniz?</p>
       <ul class="survey-options">
@@ -405,6 +446,11 @@
     </div>
 
     <p><strong>Bosch’un Serie 8</strong> ankastre fırın ailesi; kendini temizleme, cep telefonundan kontrol gibi birçok yenilikle fırın tarihinde yeni bir sayfa açıyor.</p>
+    
+    <div class="cta-text-container">
+      <p>Mutfakta <strong>devrim yaratan</strong> Bosch Serie 8 fırınlarla tanışın, hayalinizdeki lezzetlere bir adım daha yaklaşın! Teknolojinin ve tasarımın <strong>mükemmel uyumunu</strong> keşfetmek için...</p>
+    </div>
+
     <div class="button-wrapper">
       <a class="button" href="https://ad.doubleclick.net/ddm/trackclk/N2054846.3735144BUNDLEAPP/B32486569.406791996" target="_blank">Hemen Keşfet</a>
     </div>
@@ -440,6 +486,10 @@
 
     const isTouchDevice = () => ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
+    let autoplayIntervalId = null;
+    const AUTOPLAY_DELAY = 4500; 
+    let manualNavTimeout; 
+
     function updateDots() {
       if (!dotsContainer) return;
       dots.forEach((dot, idx) => {
@@ -460,16 +510,16 @@
         return;
       }
       if (index >= totalCarouselSlides) {
-        index = totalCarouselSlides - 1; 
-      } else if (index < 0) {
         index = 0; 
+      } else if (index < 0) {
+        index = totalCarouselSlides - 1; 
       }
       currentCarouselIndex = index;
       
       const targetTranslate = -currentCarouselIndex * slideWidth();
       
       if (animate) {
-        carouselInner.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)';
+        carouselInner.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
       } else {
         carouselInner.style.transition = 'none';
       }
@@ -479,15 +529,46 @@
       updateDots();
     }
 
+    function startCarouselAutoplay() {
+      if (autoplayIntervalId) clearInterval(autoplayIntervalId); 
+      if (totalCarouselSlides > 0) {
+        autoplayIntervalId = setInterval(() => {
+          showCarouselSlide(currentCarouselIndex + 1);
+        }, AUTOPLAY_DELAY);
+      }
+    }
+
+    function stopCarouselAutoplay() {
+      clearInterval(autoplayIntervalId);
+      autoplayIntervalId = null;
+    }
+    
+    carousel.addEventListener('mouseenter', stopCarouselAutoplay);
+    carousel.addEventListener('mouseleave', () => {
+        // Sadece manuel etkileşimden sonraki timeout aktif değilse veya
+        // kullanıcı mobil kontrolleri aktif etmediyse başlat
+        if(!carouselControls.classList.contains('mobile-visible')) {
+            startCarouselAutoplay();
+        }
+    });
+
     const prevButton = carousel.querySelector('.carousel .prev');
     const nextButton = carousel.querySelector('.carousel .next');
 
+    const handleManualCarouselInteraction = () => {
+        stopCarouselAutoplay();
+        clearTimeout(manualNavTimeout); 
+        manualNavTimeout = setTimeout(startCarouselAutoplay, AUTOPLAY_DELAY * 2.5); // Biraz daha uzun bekleme
+    };
+
     if (prevButton && nextButton && carouselInner) {
       prevButton.addEventListener('click', () => {
+        handleManualCarouselInteraction();
         showCarouselSlide(currentCarouselIndex - 1);
       });
 
       nextButton.addEventListener('click', () => {
+        handleManualCarouselInteraction();
         showCarouselSlide(currentCarouselIndex + 1);
       });
     }
@@ -498,6 +579,7 @@
         dot.classList.add('carousel-dot');
         dot.setAttribute('aria-label', `${i + 1}. slayda git`);
         dot.addEventListener('click', () => {
+          handleManualCarouselInteraction();
           showCarouselSlide(i);
         });
         dotsContainer.appendChild(dot);
@@ -507,6 +589,7 @@
 
     document.querySelectorAll('[data-slide]').forEach(el => {
       el.addEventListener('click', () => {
+        handleManualCarouselInteraction();
         const slideIndex = parseInt(el.getAttribute('data-slide'), 10);
         if (!isNaN(slideIndex) && slideIndex >= 0 && slideIndex < totalCarouselSlides) {
           showCarouselSlide(slideIndex);
@@ -520,7 +603,10 @@
     if (carouselInner) {
       carouselInner.addEventListener('touchstart', (event) => {
         if (event.touches.length > 1) return;
+        if (isDragging) return; 
+        
         isDragging = true;
+        stopCarouselAutoplay(); 
         touchStartX = event.touches[0].clientX;
         startTranslate = currentTranslate;
         carouselInner.style.transition = 'none';
@@ -539,7 +625,7 @@
         if (!isDragging) return;
         isDragging = false;
         carouselInner.classList.remove('is-dragging');
-        carouselInner.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)';
+        carouselInner.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
 
         const swipeDistance = currentTranslate - startTranslate;
 
@@ -550,16 +636,18 @@
             showCarouselSlide(currentCarouselIndex - 1);
           }
         } else {
-          showCarouselSlide(currentCarouselIndex);
+          showCarouselSlide(currentCarouselIndex); 
         }
+        handleManualCarouselInteraction(); // Swipe sonrası da autoplay'i gecikmeli başlat
       });
       
       carouselInner.addEventListener('touchcancel', () => {
           if (!isDragging) return;
           isDragging = false;
           carouselInner.classList.remove('is-dragging');
-          carouselInner.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)';
+          carouselInner.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1)';
           showCarouselSlide(currentCarouselIndex);
+          handleManualCarouselInteraction();
       });
     }
 
@@ -570,22 +658,31 @@
         clearTimeout(controlsTimer);
         controlsTimer = setTimeout(() => {
           carouselControls.classList.remove('mobile-visible');
+          // Eğer fare üzerinde değilse ve manuel bir etkileşim zamanlayıcısı yoksa autoplay'i başlat
+           if (!carousel.matches(':hover') && !manualNavTimeout) {
+             startCarouselAutoplay();
+           }
         }, 3000);
       };
       
       carouselInner.addEventListener('click', (event) => {
         if (Math.abs(currentTranslate - startTranslate) > 15) {
-            startTranslate = currentTranslate;
-            return;
+            startTranslate = currentTranslate; 
+            return; 
         }
         if (event.target.closest('.carousel-controls button') || event.target.closest('.carousel-dot')) {
-          return;
+          return; 
         }
         if (!carouselControls.classList.contains('mobile-visible')) {
             showControlsTemporarily();
+            stopCarouselAutoplay(); 
+            clearTimeout(manualNavTimeout); // Manuel etkileşim zamanlayıcısını da durdur
         } else {
             carouselControls.classList.remove('mobile-visible');
             clearTimeout(controlsTimer);
+            if (!carousel.matches(':hover')) {
+                startCarouselAutoplay();
+            }
         }
       });
 
@@ -593,17 +690,16 @@
         if (button) {
             button.addEventListener('click', () => {
                 if (carouselControls.classList.contains('mobile-visible')) {
-                    showControlsTemporarily();
+                    showControlsTemporarily(); 
                 }
             });
         }
       });
     }
 
-    // ANKET ve ADVERTORIAL GÜNCELLEME SCRIPTI (localStorage KULLANIMI KALDIRILDI)
+    // ANKET ve ADVERTORIAL GÜNCELLEME SCRIPTI
     const surveyContainer = document.getElementById('ovenSurvey');
     const dynamicAdvertorialIntro = document.getElementById('dynamicAdvertorialIntro');
-    // const surveyStorageKey = 'boschOvenSurvey_UserVote_v2'; // Artık kullanılmıyor
 
     const advertorialSentences = {
       default: "İyi ki insanlık mutfak çözümlerini geliştirmekten hiç vazgeçmedi.",
@@ -621,44 +717,41 @@
     
     if (surveyContainer) {
       const surveyOptions = surveyContainer.querySelectorAll('.survey-options button');
-      // const surveyFeedbackDiv = surveyContainer.querySelector('.survey-feedback'); // Görsel geri bildirim yok
-
-      // Sayfa yüklendiğinde anket durumunu sıfırla
+      
       surveyOptions.forEach(button => {
         button.disabled = false;
         button.classList.remove('selected');
       });
-      updateAdvertorialIntro('default'); // Varsayılan advertorial metnini ayarla
+      updateAdvertorialIntro('default'); 
 
       const handleSurveyVote = (selectedOptionKey) => {
         surveyOptions.forEach(button => {
-          button.disabled = true; // Tüm butonları pasif yap
+          button.disabled = true; 
           if (button.dataset.option === selectedOptionKey) {
             button.classList.add('selected');
           }
         });
-        updateAdvertorialIntro(selectedOptionKey); // Advertorial metnini güncelle
+        updateAdvertorialIntro(selectedOptionKey);
       };
 
       surveyOptions.forEach(button => {
         button.addEventListener('click', () => {
-          // Buton zaten pasifse bir şey yapma (teorik olarak olmamalı ama ek kontrol)
           if (button.disabled) return; 
-          
           const selectedOptionKey = button.dataset.option;
           handleSurveyVote(selectedOptionKey);
-          // localStorage.setItem artık yok
         });
       });
 
     } else {
-        // Anket bulunamazsa bile varsayılan advertorial metnini ayarla
         updateAdvertorialIntro('default');
     }
 
-    if (totalCarouselSlides > 0) {
-      showCarouselSlide(currentCarouselIndex, false);
-    }
+    document.addEventListener('DOMContentLoaded', () => {
+        if (totalCarouselSlides > 0) {
+            showCarouselSlide(currentCarouselIndex, false); 
+            startCarouselAutoplay(); 
+        }
+    });
   </script>
 </body>
 </html>
