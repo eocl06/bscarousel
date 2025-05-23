@@ -240,77 +240,100 @@
       transform: scale(1.2);
     }
 
-    /* ANKET STİLLERİ */
+    /* ANKET STİLLERİ - Başlık İyileştirildi */
     .survey-container {
       background-color: #f8f9fa;
       border: 1px solid #e9ecef;
       border-radius: var(--carousel-radius);
-      padding: 25px;
+      padding: 30px 25px;
       margin: 48px 0;
       text-align: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
     }
+
     .survey-container h3 {
       font-family: 'Playfair Display', serif;
-      font-size: 1.75rem;
-      margin-bottom: 12px;
+      font-size: 1.7rem;
       color: var(--text);
+      font-weight: 700;
+      position: relative;
+      padding-bottom: 12px;
+      margin-bottom: 25px;
     }
+
+    .survey-container h3::after {
+      content: '';
+      display: block;
+      width: 50px;
+      height: 3px;
+      background-color: var(--accent);
+      border-radius: 1.5px;
+      margin: 0 auto;
+    }
+
     .survey-question {
       font-family: 'Inter', sans-serif;
       font-size: 1.05rem;
       color: var(--muted);
-      margin-bottom: 25px;
-      line-height: 1.6;
+      margin-bottom: 30px;
+      line-height: 1.65;
     }
+
     .survey-options {
       list-style: none;
       padding: 0;
       margin: 0 auto;
-      max-width: 450px;
+      max-width: 480px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
+
     .survey-options li button {
       display: block;
       width: 100%;
-      padding: 14px 18px;
+      padding: 15px 20px;
       background-color: #fff;
-      border: 1px solid #ced4da;
-      border-radius: 8px;
+      border: 1px solid #dee2e6;
+      border-radius: 10px;
       color: var(--text);
       font-family: var(--font);
-      font-size: 1rem;
+      font-size: 0.98rem;
       font-weight: 500;
       cursor: pointer;
-      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease, box-shadow 0.15s ease;
       text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
     }
-    .survey-options li button:hover:not(:disabled) { /* Sadece pasif değilken hover efekti */
-      background-color: var(--accent-bg);
-      border-color: var(--accent);
-      transform: translateY(-2px);
+
+    .survey-options li button:hover:not(:disabled) {
+      background-color: #fef7f7;
+      border-color: #f8c9cc;
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.06);
     }
+
     .survey-options li button.selected {
       background-color: var(--accent);
       color: #fff;
-      border-color: var(--accent);
-      font-weight: 700;
+      border-color: var(--accent); 
+      font-weight: 600;
+      box-shadow: 0 3px 7px rgba(210, 21, 28, 0.25);
+      transform: translateY(0) scale(1);
     }
+
     .survey-options li button:disabled {
-      opacity: 0.8;
+      opacity: 0.85;
       cursor: not-allowed;
       transform: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
     }
+
     .survey-options li button.selected:disabled {
-        opacity: 1;
+      opacity: 1;
     }
-    .survey-feedback { /* Bu div artık kullanılmayacak ama stili kalabilir */
-      margin-top: 25px;
-      font-size: 1.1rem;
-      color: var(--accent);
-      font-weight: 500;
+    .survey-feedback { 
+      display: none !important;
     }
 
   </style>
@@ -348,7 +371,8 @@
         <li><button type="button" data-option="sebzeler">Sebze közleme veya gratenleri</button></li>
         <li><button type="button" data-option="hamur_isleri">Ekmek, pizza, pide gibi hamur işlerini</button></li>
       </ul>
-      <div class="survey-feedback" style="display: none;"></div> </div>
+      <div class="survey-feedback" style="display: none !important;"></div>
+    </div>
 
     <h2>Peki ya günümüzün son teknolojileri?</h2>
     <p><span id="dynamicAdvertorialIntro">İyi ki insanlık mutfak çözümlerini geliştirmekten hiç vazgeçmedi.</span> <strong data-slide="0">3D Fry</strong>
@@ -431,14 +455,14 @@
     }
 
     function showCarouselSlide(index, animate = true) {
-      if (totalCarouselSlides === 0) { // Hiç slayt yoksa işlem yapma
+      if (totalCarouselSlides === 0) {
         currentCarouselIndex = 0;
         return;
       }
       if (index >= totalCarouselSlides) {
-        index = totalCarouselSlides - 1;
+        index = totalCarouselSlides - 1; 
       } else if (index < 0) {
-        index = 0;
+        index = 0; 
       }
       currentCarouselIndex = index;
       
@@ -576,10 +600,10 @@
       });
     }
 
-    // ANKET ve ADVERTORIAL GÜNCELLEME SCRIPTI
+    // ANKET ve ADVERTORIAL GÜNCELLEME SCRIPTI (localStorage KULLANIMI KALDIRILDI)
     const surveyContainer = document.getElementById('ovenSurvey');
     const dynamicAdvertorialIntro = document.getElementById('dynamicAdvertorialIntro');
-    const surveyStorageKey = 'boschOvenSurvey_UserVote_v2'; // v2 olarak güncelledik
+    // const surveyStorageKey = 'boschOvenSurvey_UserVote_v2'; // Artık kullanılmıyor
 
     const advertorialSentences = {
       default: "İyi ki insanlık mutfak çözümlerini geliştirmekten hiç vazgeçmedi.",
@@ -597,42 +621,40 @@
     
     if (surveyContainer) {
       const surveyOptions = surveyContainer.querySelectorAll('.survey-options button');
-      // const surveyFeedback = surveyContainer.querySelector('.survey-feedback'); // Artık kullanılmıyor
+      // const surveyFeedbackDiv = surveyContainer.querySelector('.survey-feedback'); // Görsel geri bildirim yok
 
-      const disableSurvey = (votedOptionKey = null) => {
+      // Sayfa yüklendiğinde anket durumunu sıfırla
+      surveyOptions.forEach(button => {
+        button.disabled = false;
+        button.classList.remove('selected');
+      });
+      updateAdvertorialIntro('default'); // Varsayılan advertorial metnini ayarla
+
+      const handleSurveyVote = (selectedOptionKey) => {
         surveyOptions.forEach(button => {
-          button.disabled = true;
-          if (votedOptionKey && button.dataset.option === votedOptionKey) {
+          button.disabled = true; // Tüm butonları pasif yap
+          if (button.dataset.option === selectedOptionKey) {
             button.classList.add('selected');
           }
         });
-        // surveyFeedback.style.display = 'none'; // Geri bildirim gösterilmeyecek
-        
-        // Advertorial metnini anket cevabına göre güncelle
-        if (votedOptionKey) {
-          updateAdvertorialIntro(votedOptionKey);
-        }
+        updateAdvertorialIntro(selectedOptionKey); // Advertorial metnini güncelle
       };
 
-      const currentVotedOptionKey = localStorage.getItem(surveyStorageKey);
-      if (currentVotedOptionKey) {
-        disableSurvey(currentVotedOptionKey);
-      } else {
-        // Henüz oy kullanılmadıysa, varsayılan advertorial metnini ayarla
-        updateAdvertorialIntro('default'); 
-        surveyOptions.forEach(button => {
-          button.addEventListener('click', () => {
-            const selectedOptionKey = button.dataset.option;
-            localStorage.setItem(surveyStorageKey, selectedOptionKey);
-            disableSurvey(selectedOptionKey);
-          });
+      surveyOptions.forEach(button => {
+        button.addEventListener('click', () => {
+          // Buton zaten pasifse bir şey yapma (teorik olarak olmamalı ama ek kontrol)
+          if (button.disabled) return; 
+          
+          const selectedOptionKey = button.dataset.option;
+          handleSurveyVote(selectedOptionKey);
+          // localStorage.setItem artık yok
         });
-      }
+      });
+
     } else {
-        // Anket yoksa bile varsayılan advertorial metnini ayarla
+        // Anket bulunamazsa bile varsayılan advertorial metnini ayarla
         updateAdvertorialIntro('default');
     }
-
 
     if (totalCarouselSlides > 0) {
       showCarouselSlide(currentCarouselIndex, false);
