@@ -93,7 +93,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
-    .caption { /* Genel resim altı yazıları için */
+    .caption {
       text-align: center;
       font-size: 0.875rem;
       color: #9ca3af;
@@ -125,16 +125,15 @@
       border-radius: var(--carousel-radius);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
       margin: 32px 0;
-      -webkit-tap-highlight-color: transparent; /* Mobilde dokunma vurgusunu kaldırır */
+      -webkit-tap-highlight-color: transparent;
     }
     .carousel-inner {
       display: flex;
-      /* transition: transform 0.5s ease-in-out; JS TARAFI KONTROL EDECEK */
       user-select: none;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
-      cursor: grab; /* Kaydırma imkanı olduğunu belirtir */
+      cursor: grab;
     }
     .carousel-inner.is-dragging {
       cursor: grabbing;
@@ -150,7 +149,7 @@
       height: auto;
       display: block;
       border-radius: 0;
-      pointer-events: none; /* Resimlerin sürüklenmesini engeller */
+      pointer-events: none;
     }
     .carousel-slide .caption {
       padding: 12px 16px 35px 16px; 
@@ -164,8 +163,6 @@
       position: relative;
       z-index: 1;
     }
-
-    /* Carousel Kontrol Butonları */
     .carousel-controls {
       position: absolute;
       top: 50%;
@@ -176,27 +173,21 @@
       padding: 0 15px;
       pointer-events: none;
       z-index: 3;
-      opacity: 0; /* Başlangıçta gizli */
+      opacity: 0;
       transition: opacity 0.3s ease-in-out;
     }
-
-    /* Masaüstü için hover davranışı */
     @media (hover: hover) and (pointer: fine) {
       .carousel:hover .carousel-controls {
         opacity: 1;
       }
     }
-
-    /* Mobil için dokunmayla göster/gizle sınıfı */
     .carousel-controls.mobile-visible {
       opacity: 1;
-      pointer-events: auto; /* Görünür olduğunda tıklanabilir */
+      pointer-events: auto;
     }
     .carousel-controls.mobile-visible button {
-        pointer-events: all; /* Butonlar her zaman tıklanabilir olmalı (eğer parent görünürse) */
+        pointer-events: all;
     }
-
-
     .carousel-controls button {
       pointer-events: all;
       background: rgba(0, 0, 0, 0.15);
@@ -214,13 +205,11 @@
       transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
       box-shadow: none;
     }
-
     .carousel-controls button:hover {
       background: rgba(0, 0, 0, 0.35);
       color: #fff;
       transform: scale(1.1);
     }
-
     .carousel-dots {
       position: absolute;
       bottom: 0;
@@ -250,6 +239,80 @@
       background-color: var(--accent); 
       transform: scale(1.2);
     }
+
+    /* ANKET STİLLERİ */
+    .survey-container {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: var(--carousel-radius);
+      padding: 25px;
+      margin: 48px 0;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+    .survey-container h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .survey-question {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+    .survey-options {
+      list-style: none;
+      padding: 0;
+      margin: 0 auto;
+      max-width: 450px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .survey-options li button {
+      display: block;
+      width: 100%;
+      padding: 14px 18px;
+      background-color: #fff;
+      border: 1px solid #ced4da;
+      border-radius: 8px;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+      text-align: center;
+    }
+    .survey-options li button:hover:not(:disabled) { /* Sadece pasif değilken hover efekti */
+      background-color: var(--accent-bg);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .survey-options li button.selected {
+      background-color: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 700;
+    }
+    .survey-options li button:disabled {
+      opacity: 0.8;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .survey-options li button.selected:disabled {
+        opacity: 1;
+    }
+    .survey-feedback { /* Bu div artık kullanılmayacak ama stili kalabilir */
+      margin-top: 25px;
+      font-size: 1.1rem;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
   </style>
 </head>
 <body>
@@ -276,8 +339,19 @@
     <p>Peki ya Mezopotamyalılar <em>“Açık ateş neyimize yetmiyor?”</em> dese, tuğla fırına hiç zahmet etmeseydi? Biz de hayatımıza en az 5000 yıldır kullanılan <strong>tandır fırınları</strong> ile devam ederdik. Hindistan’dan Anadolu’ya geniş bir coğrafyada kullanılan bu fırın, büyük bir çukur açıp içini kille kaplayarak hazırlanıyordu. Bu kil fırına köz ve pişecek yemekler konuyordu. Hani bazı kebapçılarda taze lavaş yapılır; işte o fırının atası. <strong>Mucidi de Hintler.</strong></p>
     <p>Tandır fırınını ilk düşünen Hintli dostumuz o gün başka bir şeyle meşgul olsaydı? Yeryüzü fırınlarına tamah edecektik el mecbur. <strong>30.000 yıl evvel</strong> atalarımız toprağı kazar, kızdırdıkları taşları çukura atar, yemeklerini yanmasın diye yapraklara sarıp taşların üzerine bırakır ve çukuru geri doldururmuş. Günümüzde bir testi yemek yapmak için çukur kazmak akıl alır gibi değil tabii.</p>
     
+    <div class="survey-container" id="ovenSurvey">
+      <h3>Anket: Fırınınız Olmasaydı...</h3>
+      <p class="survey-question">Eğer evinizde modern bir fırınınız olmasaydı, en çok hangi tür yemeği yapmayı özlerdiniz?</p>
+      <ul class="survey-options">
+        <li><button type="button" data-option="tatlilar">Kek, kurabiye gibi tatlıları</button></li>
+        <li><button type="button" data-option="ana_yemekler">Fırında et/tavuk/balık gibi ana yemekleri</button></li>
+        <li><button type="button" data-option="sebzeler">Sebze közleme veya gratenleri</button></li>
+        <li><button type="button" data-option="hamur_isleri">Ekmek, pizza, pide gibi hamur işlerini</button></li>
+      </ul>
+      <div class="survey-feedback" style="display: none;"></div> </div>
+
     <h2>Peki ya günümüzün son teknolojileri?</h2>
-    <p>İyi ki insanlık mutfak çözümlerini geliştirmekten hiç vazgeçmedi. <strong data-slide="0">3D Fry</strong>
+    <p><span id="dynamicAdvertorialIntro">İyi ki insanlık mutfak çözümlerini geliştirmekten hiç vazgeçmedi.</span> <strong data-slide="0">3D Fry</strong>
     mesela. Ya da yiyeceklerin besin değerlerini koruyan <strong data-slide="1">Steam Function Plus</strong>
     . Kekiniz en iyi kıvama ulaştığında fırınınızı otomatik kapatan <strong data-slide="2">PerfectBake Plus</strong>
     ’a ne demeli?</p>
@@ -323,7 +397,7 @@
     });
 
     // Carousel Script
-    const carousel = document.getElementById('myCarousel'); // ID eklendi
+    const carousel = document.getElementById('myCarousel');
     const carouselInner = carousel.querySelector('.carousel-inner');
     const carouselControls = carousel.querySelector('.carousel-controls');
     const carouselSlides = carousel.querySelectorAll('.carousel-slide');
@@ -333,15 +407,13 @@
     const dotsContainer = carousel.querySelector('.carousel-dots');
     let dots = [];
 
-    // Swipe Değişkenleri
     let isDragging = false;
     let touchStartX = 0;
     let currentTranslate = 0;
-    let startTranslate = 0; // Kaydırmaya başlarkenki transform değeri (px)
-    const swipeThreshold = 50; // Min. kaydırma mesafesi
-    const slideWidth = () => carousel.offsetWidth; // Dinamik slide genişliği
+    let startTranslate = 0;
+    const swipeThreshold = 50;
+    const slideWidth = () => carousel.offsetWidth;
 
-    // Dokunmatik cihaz tespiti
     const isTouchDevice = () => ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
 
     function updateDots() {
@@ -353,12 +425,16 @@
         }
       });
     }
-
+    
     function setTransform(translateX) {
         carouselInner.style.transform = `translateX(${translateX}px)`;
     }
-    
+
     function showCarouselSlide(index, animate = true) {
+      if (totalCarouselSlides === 0) { // Hiç slayt yoksa işlem yapma
+        currentCarouselIndex = 0;
+        return;
+      }
       if (index >= totalCarouselSlides) {
         index = totalCarouselSlides - 1;
       } else if (index < 0) {
@@ -369,21 +445,15 @@
       const targetTranslate = -currentCarouselIndex * slideWidth();
       
       if (animate) {
-        carouselInner.style.transition = 'transform 0.4s ease-out'; // Yumuşak geçiş
+        carouselInner.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)';
       } else {
-        carouselInner.style.transition = 'none'; // Sürüklerken anlık değişim
+        carouselInner.style.transition = 'none';
       }
       setTransform(targetTranslate);
-      currentTranslate = targetTranslate; // Mevcut pozisyonu güncelle
+      currentTranslate = targetTranslate;
 
-      // Animasyon bittikten sonra (eğer varsa) transition'ı temizle
-      if (animate) {
-        // Transition'ın gerçekten bitmesini beklemek yerine, anlık olarak temizleyebiliriz
-        // veya bir timeout kullanabiliriz. Şimdilik bu şekilde bırakalım.
-      }
       updateDots();
     }
-
 
     const prevButton = carousel.querySelector('.carousel .prev');
     const nextButton = carousel.querySelector('.carousel .next');
@@ -423,16 +493,15 @@
       });
     });
     
-    // Swipe ve Mobil Tap Eventleri
     if (carouselInner) {
       carouselInner.addEventListener('touchstart', (event) => {
-        if (event.touches.length > 1) return; // Birden fazla parmakla dokunmayı yoksay
+        if (event.touches.length > 1) return;
         isDragging = true;
         touchStartX = event.touches[0].clientX;
-        startTranslate = currentTranslate; // Mevcut transform değerini al
-        carouselInner.style.transition = 'none'; // Sürüklerken animasyonu kapat
+        startTranslate = currentTranslate;
+        carouselInner.style.transition = 'none';
         carouselInner.classList.add('is-dragging');
-      }, { passive: true }); // Dikey scroll'u engellememek için true kalabilir, agresif yanal sürüklemede sorun olursa false yapıp preventDefault eklenebilir.
+      }, { passive: true });
 
       carouselInner.addEventListener('touchmove', (event) => {
         if (!isDragging || event.touches.length > 1) return;
@@ -446,18 +515,17 @@
         if (!isDragging) return;
         isDragging = false;
         carouselInner.classList.remove('is-dragging');
-        carouselInner.style.transition = 'transform 0.4s ease-out'; // Bırakınca animasyonu aç
+        carouselInner.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)';
 
-        const deltaX = currentTranslate - startTranslate; // Toplam sürükleme mesafesi
+        const swipeDistance = currentTranslate - startTranslate;
 
-        if (Math.abs(deltaX) > swipeThreshold) {
-          if (deltaX < 0) { // Sola kaydırma (sonraki slayt)
+        if (Math.abs(swipeDistance) > swipeThreshold) {
+          if (swipeDistance < 0) {
             showCarouselSlide(currentCarouselIndex + 1);
-          } else { // Sağa kaydırma (önceki slayt)
+          } else {
             showCarouselSlide(currentCarouselIndex - 1);
           }
         } else {
-          // Eşiği geçmedi, mevcut slayta geri dön
           showCarouselSlide(currentCarouselIndex);
         }
       });
@@ -466,67 +534,108 @@
           if (!isDragging) return;
           isDragging = false;
           carouselInner.classList.remove('is-dragging');
-          carouselInner.style.transition = 'transform 0.4s ease-out';
-          showCarouselSlide(currentCarouselIndex); // İptal durumunda mevcut slayta dön
+          carouselInner.style.transition = 'transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1)';
+          showCarouselSlide(currentCarouselIndex);
       });
     }
 
-    // Mobil cihazlarda carousel'e tıklayınca kontrolleri göster/gizle
     if (isTouchDevice() && carousel && carouselControls) {
-      // Masaüstü hover'ını CSS ile yöneteceğiz, JS ile müdahale etmeyelim
-      // Sadece dokunmatik cihazlarda tap için ek işlevsellik
-      let controlsTimer; // Kontrolleri otomatik gizlemek için zamanlayıcı
-
+      let controlsTimer;
       const showControlsTemporarily = () => {
         carouselControls.classList.add('mobile-visible');
-        carouselControls.style.pointerEvents = 'auto'; // Tıklanabilir yap
-
-        clearTimeout(controlsTimer); // Önceki zamanlayıcıyı temizle
+        clearTimeout(controlsTimer);
         controlsTimer = setTimeout(() => {
           carouselControls.classList.remove('mobile-visible');
-          // Opacity transition'ı bittikten sonra pointer-events'i none yapmak daha iyi olabilir,
-          // ama şimdilik anlık gizleme için böyle bırakalım.
-          // CSS'te .carousel-controls.mobile-visible için pointer-events:auto tanımladık.
-        }, 3000); // 3 saniye sonra gizle
+        }, 3000);
       };
       
-      // Carousel'e genel bir tap alanı (resimlerin olduğu alan)
       carouselInner.addEventListener('click', (event) => {
-         // Eğer sürükleme sonrası bir click ise (bazen olur), veya butonlara/noktalara tıklandıysa işlem yapma
-        if (Math.abs(currentTranslate - startTranslate) > 10) { // Küçük bir sürükleme toleransı
+        if (Math.abs(currentTranslate - startTranslate) > 15) {
+            startTranslate = currentTranslate;
             return;
         }
         if (event.target.closest('.carousel-controls button') || event.target.closest('.carousel-dot')) {
           return;
         }
-        
-        // Kontrolleri toggle etme yerine, dokununca geçici gösterelim
         if (!carouselControls.classList.contains('mobile-visible')) {
             showControlsTemporarily();
         } else {
-            // Zaten görünürse ve tekrar iç alana tıklanırsa gizleyebiliriz veya süreyi uzatabiliriz
-            // Şimdilik dokunulduğunda hep süreyi başlatsın
-             showControlsTemporarily();
+            carouselControls.classList.remove('mobile-visible');
+            clearTimeout(controlsTimer);
         }
       });
 
-      // Butonlara tıklandığında süreyi sıfırla/uzat
       [prevButton, nextButton].forEach(button => {
         if (button) {
             button.addEventListener('click', () => {
                 if (carouselControls.classList.contains('mobile-visible')) {
-                    showControlsTemporarily(); // Süreyi yeniden başlat
+                    showControlsTemporarily();
                 }
             });
         }
       });
+    }
 
+    // ANKET ve ADVERTORIAL GÜNCELLEME SCRIPTI
+    const surveyContainer = document.getElementById('ovenSurvey');
+    const dynamicAdvertorialIntro = document.getElementById('dynamicAdvertorialIntro');
+    const surveyStorageKey = 'boschOvenSurvey_UserVote_v2'; // v2 olarak güncelledik
+
+    const advertorialSentences = {
+      default: "İyi ki insanlık mutfak çözümlerini geliştirmekten hiç vazgeçmedi.",
+      tatlilar: "Neyse ki tatlı krizlerinizde veya özel günlerinizde o mükemmel keki, kurabiyeyi yapabilmek için mutfak çözümleri gelişmeye devam etti.",
+      ana_yemekler: "Neyse ki o unutulmaz fırınlanmış et, tavuk veya balık lezzetlerinden mahrum kalmamamız için mutfak çözümleri gelişmeye devam etti.",
+      sebzeler: "Neyse ki o nefis közlenmiş sebzelerin veya tam kıvamında bir gratenin hayaliyle yaşamıyoruz, çünkü mutfak çözümleri gelişmeye devam etti.",
+      hamur_isleri: "Neyse ki ev yapımı ekmeklerin, çıtır pizzaların kokusundan vazgeçmek zorunda değiliz, çünkü mutfak çözümleri gelişmeye devam etti."
+    };
+
+    function updateAdvertorialIntro(optionKey) {
+      if (dynamicAdvertorialIntro) {
+        dynamicAdvertorialIntro.textContent = advertorialSentences[optionKey] || advertorialSentences.default;
+      }
+    }
+    
+    if (surveyContainer) {
+      const surveyOptions = surveyContainer.querySelectorAll('.survey-options button');
+      // const surveyFeedback = surveyContainer.querySelector('.survey-feedback'); // Artık kullanılmıyor
+
+      const disableSurvey = (votedOptionKey = null) => {
+        surveyOptions.forEach(button => {
+          button.disabled = true;
+          if (votedOptionKey && button.dataset.option === votedOptionKey) {
+            button.classList.add('selected');
+          }
+        });
+        // surveyFeedback.style.display = 'none'; // Geri bildirim gösterilmeyecek
+        
+        // Advertorial metnini anket cevabına göre güncelle
+        if (votedOptionKey) {
+          updateAdvertorialIntro(votedOptionKey);
+        }
+      };
+
+      const currentVotedOptionKey = localStorage.getItem(surveyStorageKey);
+      if (currentVotedOptionKey) {
+        disableSurvey(currentVotedOptionKey);
+      } else {
+        // Henüz oy kullanılmadıysa, varsayılan advertorial metnini ayarla
+        updateAdvertorialIntro('default'); 
+        surveyOptions.forEach(button => {
+          button.addEventListener('click', () => {
+            const selectedOptionKey = button.dataset.option;
+            localStorage.setItem(surveyStorageKey, selectedOptionKey);
+            disableSurvey(selectedOptionKey);
+          });
+        });
+      }
+    } else {
+        // Anket yoksa bile varsayılan advertorial metnini ayarla
+        updateAdvertorialIntro('default');
     }
 
 
-    // Başlangıçta ilk slaydı ve aktif noktayı göster
     if (totalCarouselSlides > 0) {
-      showCarouselSlide(currentCarouselIndex, false); // Başlangıçta animasyonsuz
+      showCarouselSlide(currentCarouselIndex, false);
     }
   </script>
 </body>
