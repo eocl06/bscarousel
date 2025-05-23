@@ -245,26 +245,24 @@
       background-color: #f8f9fa;
       border: 1px solid #e9ecef;
       border-radius: var(--carousel-radius);
-      padding: 35px 25px 30px 25px; /* Üst padding artırıldı */
+      padding: 35px 25px 30px 25px; 
       margin: 48px 0;
       text-align: center; 
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
       position: relative; 
     }
 
-    /* YENİ: Anket Sponsor Logosu Stili */
-    .survey-sponsor {
+    .survey-sponsor { 
       position: absolute;
-      top: 18px; /* Konteynerin üstünden boşluk */
-      right: 22px; /* Konteynerin sağından boşluk */
+      top: 18px; 
+      right: 22px; 
     }
 
-    .survey-sponsor img {
-      max-width: 40px; /* Logo biraz daha büyük */
+    .survey-sponsor img { 
+      max-width: 40px; 
       height: auto;
-      display: block; /* Tek başına resim için */
+      display: block; 
     }
-    /* "sponsorluğunda" metni kaldırıldığı için span stili de kaldırıldı */
 
     .survey-container h3 {
       font-family: 'Playfair Display', serif;
@@ -352,26 +350,26 @@
       display: none !important;
     }
 
-    /* YENİ: CTA Metin Alanı Stili */
+    /* CTA Metin Alanı Stili */
     .cta-text-container {
       text-align: center;
-      margin: 40px auto 20px auto; /* Üst ve alt boşluklar ayarlandı */
+      margin: 40px auto 20px auto; 
       padding: 20px 25px;
-      background-color: #fff9f9; /* Çok hafif kırmızımsı/pembe arka plan */
+      background-color: #fff9f9; 
       border-radius: var(--carousel-radius);
-      border-left: 5px solid var(--accent); /* Sol tarafta belirgin vurgu çizgisi */
+      border-left: 5px solid var(--accent); 
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     }
     .cta-text-container p {
-      font-family: 'Inter', sans-serif; /* Ana metin fontuyla uyum */
-      font-size: 1.1rem; /* Biraz daha büyük */
+      font-family: 'Inter', sans-serif; 
+      font-size: 1.1rem; 
       line-height: 1.75;
-      color: #333; /* Ana metin renginden biraz daha yumuşak */
+      color: #333; 
       margin-bottom: 0; 
     }
     .cta-text-container strong {
-      color: var(--accent); /* Vurgu rengi */
-      font-weight: 600; /* Kalın ama aşırı değil */
+      color: var(--accent); 
+      font-weight: 600; 
     }
 
   </style>
@@ -403,7 +401,7 @@
     <div class="survey-container" id="ovenSurvey">
       <div class="survey-sponsor">
         <img src="https://static.bundle.app/studio/6dfae320-0320-4016-a9e4-9700faa6ca38/cbce22db-3bc2-45f1-bdc9-a588f16cfd14.png" alt="Bosch Logosu">
-        </div>
+      </div>
       <h3>Anket: Fırınınız Olmasaydı...</h3>
       <p class="survey-question">Eğer evinizde modern bir fırınınız olmasaydı, en çok hangi tür yemeği yapmayı özlerdiniz?</p>
       <ul class="survey-options">
@@ -448,7 +446,7 @@
     <p><strong>Bosch’un Serie 8</strong> ankastre fırın ailesi; kendini temizleme, cep telefonundan kontrol gibi birçok yenilikle fırın tarihinde yeni bir sayfa açıyor.</p>
     
     <div class="cta-text-container">
-      <p>Mutfakta <strong>devrim yaratan</strong> Bosch Serie 8 fırınlarla tanışın, hayalinizdeki lezzetlere bir adım daha yaklaşın! Teknolojinin ve tasarımın <strong>mükemmel uyumunu</strong> keşfetmek için...</p>
+      <p>Mutfakta <strong>devrim yaratan</strong> Bosch Serie 8 fırınlarla tanışın, hayalinizdeki lezzetlere bir adım daha yaklaşın! Teknolojinin ve tasarımın <strong>mükemmel uyumu</strong> şimdi sizi bekliyor.</p>
     </div>
 
     <div class="button-wrapper">
@@ -545,21 +543,19 @@
     
     carousel.addEventListener('mouseenter', stopCarouselAutoplay);
     carousel.addEventListener('mouseleave', () => {
-        // Sadece manuel etkileşimden sonraki timeout aktif değilse veya
-        // kullanıcı mobil kontrolleri aktif etmediyse başlat
-        if(!carouselControls.classList.contains('mobile-visible')) {
+        if(!carouselControls.classList.contains('mobile-visible')) { // Sadece mobil kontroller aktif değilken başlat
             startCarouselAutoplay();
         }
     });
 
-    const prevButton = carousel.querySelector('.carousel .prev');
-    const nextButton = carousel.querySelector('.carousel .next');
-
     const handleManualCarouselInteraction = () => {
         stopCarouselAutoplay();
         clearTimeout(manualNavTimeout); 
-        manualNavTimeout = setTimeout(startCarouselAutoplay, AUTOPLAY_DELAY * 2.5); // Biraz daha uzun bekleme
+        manualNavTimeout = setTimeout(startCarouselAutoplay, AUTOPLAY_DELAY * 2.5); 
     };
+
+    const prevButton = carousel.querySelector('.carousel .prev');
+    const nextButton = carousel.querySelector('.carousel .next');
 
     if (prevButton && nextButton && carouselInner) {
       prevButton.addEventListener('click', () => {
@@ -638,7 +634,7 @@
         } else {
           showCarouselSlide(currentCarouselIndex); 
         }
-        handleManualCarouselInteraction(); // Swipe sonrası da autoplay'i gecikmeli başlat
+        handleManualCarouselInteraction(); 
       });
       
       carouselInner.addEventListener('touchcancel', () => {
@@ -658,8 +654,7 @@
         clearTimeout(controlsTimer);
         controlsTimer = setTimeout(() => {
           carouselControls.classList.remove('mobile-visible');
-          // Eğer fare üzerinde değilse ve manuel bir etkileşim zamanlayıcısı yoksa autoplay'i başlat
-           if (!carousel.matches(':hover') && !manualNavTimeout) {
+           if (!carousel.matches(':hover') && !manualNavTimeout) { // Eğer fare üzerinde değilse ve manuel zamanlayıcı yoksa başlat
              startCarouselAutoplay();
            }
         }, 3000);
@@ -676,7 +671,7 @@
         if (!carouselControls.classList.contains('mobile-visible')) {
             showControlsTemporarily();
             stopCarouselAutoplay(); 
-            clearTimeout(manualNavTimeout); // Manuel etkileşim zamanlayıcısını da durdur
+            clearTimeout(manualNavTimeout); 
         } else {
             carouselControls.classList.remove('mobile-visible');
             clearTimeout(controlsTimer);
