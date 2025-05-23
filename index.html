@@ -13,7 +13,7 @@
       --text: #111827;
       --muted: #6b7280;
       --accent: #d2151c;
-      --accent-bg: #ffeaea;
+      --accent-bg: #ffeaea; /* Kırmızı tonlu CTA arka planı için kullanılacak */
       --font: 'Roboto', sans-serif;
       --carousel-accent-light: #ffeaea;
       --carousel-text: #1f2937;
@@ -99,7 +99,6 @@
       color: #9ca3af;
       margin-top: 8px;
     }
-    /* .button-wrapper kaldırıldı */
     .button { 
       background-color: var(--accent);
       color: white;
@@ -337,53 +336,35 @@
       display: none !important;
     }
 
-    /* YENİ PREMIUM CTA BLOK STİLLERİ */
-    .premium-cta-block {
-      background-color: #ffffff; 
-      border-radius: var(--carousel-radius, 12px); 
-      padding: 35px 40px 40px 40px; 
-      margin: 50px auto 30px auto; 
-      text-align: center;
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08), 0 5px 15px rgba(0,0,0,0.06); 
-      border-top: 4px solid var(--accent); 
-      position: relative; 
-      overflow: hidden; 
+    /* BİRLEŞİK CTA BLOĞU STİLLERİ (KIRMIZI TONLU) */
+    .unified-cta-block {
+      background-color: var(--accent-bg); /* #ffeaea - Açık kırmızı arka plan */
+      padding: 35px 30px;
+      border-radius: var(--carousel-radius);
+      margin: 40px auto 30px auto; /* Üst ve alt boşluklar */
+      text-align: center; /* İçeriği ortala */
+      box-shadow: 0 5px 15px rgba(210, 21, 28, 0.15); /* Hafif vurgulu gölge */
+      border-top: 4px solid var(--accent); /* Üstte belirgin bir vurgu çizgisi */
     }
-    .premium-cta-block .cta-heading {
-      font-family: 'Playfair Display', serif; 
-      font-size: 1.9rem; 
-      color: var(--text); 
-      font-weight: 700;
-      margin-bottom: 18px; 
-      line-height: 1.3;
+
+    .unified-cta-block .cta-text { /* CTA Metni için stil */
+      font-family: 'Inter', sans-serif;
+      font-size: 1.15rem; 
+      line-height: 1.8;
+      color: var(--text); /* Arka plana göre koyu metin */
+      margin-bottom: 25px; /* Butonla arasında boşluk */
     }
-    .premium-cta-block .cta-paragraph {
-      font-family: 'Inter', sans-serif; 
-      font-size: 1.1rem; 
-      color: var(--muted); 
-      line-height: 1.75;
-      margin-left: auto; 
-      margin-right: auto;
-      margin-bottom: 30px; 
-      max-width: 560px; 
+
+    .unified-cta-block .cta-text strong { /* Metin içindeki vurgular */
+      color: var(--accent); 
+      font-weight: 700; 
     }
-    .premium-cta-block .cta-paragraph strong {
-      color: var(--text); 
-      font-weight: 600;
+
+    .unified-cta-block .button.cta-button { /* Buton için ek ayar (opsiyonel) */
+      font-size: 1rem; /* Buton metni biraz daha büyük olabilir */
+      /* Mevcut .button stillerini miras alır */
     }
-    .premium-cta-block .button.cta-button-premium {
-      padding: 14px 40px; 
-      font-size: 1.05rem; 
-      font-weight: 500; 
-      /* Diğer .button stillerini alır */
-      transition: all 0.3s ease; 
-    }
-    .premium-cta-block .button.cta-button-premium:hover {
-      /* .button:hover stilini alır, üzerine yazmak gerekirse: */
-      /* background-color: #a60f17; */
-      transform: translateY(-3px); 
-      box-shadow: 0 6px 12px rgba(210, 21, 28, 0.35); 
-    }
+    /* Eski .premium-cta-block stillerini kaldırın veya yorumlayın */
 
   </style>
 </head>
@@ -458,10 +439,9 @@
 
     <p><strong>Bosch’un Serie 8</strong> ankastre fırın ailesi; kendini temizleme, cep telefonundan kontrol gibi birçok yenilikle fırın tarihinde yeni bir sayfa açıyor.</p>
     
-    <div class="premium-cta-block">
-      <h3 class="cta-heading">Geleceğin Fırın Teknolojisiyle Tanışın!</h3>
-      <p class="cta-paragraph">Mutfakta devrim yaratan Bosch Serie 8 fırınlarla <strong>mükemmel lezzetlere</strong> ulaşmak artık çok daha keyifli. Teknolojinin ve tasarımın eşsiz uyumunu deneyimleyin.</p>
-      <a class="button cta-button-premium" href="https://ad.doubleclick.net/ddm/trackclk/N2054846.3735144BUNDLEAPP/B32486569.406791996" target="_blank">Hemen Keşfet &rarr;</a>
+    <div class="unified-cta-block">
+      <p class="cta-text">Mutfakta <strong>devrim yaratan</strong> Bosch Serie 8 fırınlarla tanışın, hayalinizdeki lezzetlere bir adım daha yaklaşın! Teknolojinin ve tasarımın <strong>mükemmel uyumu</strong> şimdi sizi bekliyor.</p>
+      <a class="button cta-button" href="https://ad.doubleclick.net/ddm/trackclk/N2054846.3735144BUNDLEAPP/B32486569.406791996" target="_blank">Hemen Keşfet</a>
     </div>
 
   </div>
