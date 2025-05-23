@@ -10,14 +10,13 @@
   <style>
     :root {
       --bg: #fefefe;
-      --text: #111827; /* Original text color */
+      --text: #111827;
       --muted: #6b7280;
       --accent: #d2151c;
-      --accent-bg: #ffeaea; /* Original accent-bg, can be used as --accent-light */
+      --accent-bg: #ffeaea;
       --font: 'Roboto', sans-serif;
-      /* Variables from new carousel for its scope */
-      --carousel-accent-light: #ffeaea; /* Mapped from --accent-bg */
-      --carousel-text: #1f2937; /* New carousel text, slightly different */
+      --carousel-accent-light: #ffeaea;
+      --carousel-text: #1f2937;
       --carousel-radius: 12px;
     }
     * {
@@ -48,7 +47,7 @@
       max-width: 680px;
       margin: 0 auto;
       padding: 16px 24px 32px;
-      background: #fff; /* Original container background */
+      background: #fff;
       border-radius: 20px;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
       position: relative;
@@ -72,32 +71,34 @@
       font-family: 'Inter', sans-serif;
     }
     p strong {
-      color: var(--text); /* Ana metin rengi ile uyumlu */
+      color: var(--text); 
       font-weight: 600;
-      background-color: transparent; /* Arka plan yok */
+      background-color: transparent; 
       padding: 0 2px;
       border-radius: 4px;
-      cursor: pointer;
+      cursor: pointer; 
       position: relative;
     }
 
-    p strong[data-tip] {
-      color: var(--accent); /* Sadece tooltip olanlar kırmızı */
-      background-color: var(--accent-bg); /* Hafif kırmızı zemin */
-      padding: 0 4px;
+    /* data-slide olan strong etiketlerine özel stil */
+    p strong[data-slide] {
+      color: var(--accent); /* Kırmızı metin rengi */
+      background-color: var(--accent-bg); /* Açık kırmızı arka plan */
+      padding: 0 4px; /* Vurgulu elemanlar için önceki dolgu miktarı */
     }
+
     .image-block {
       margin: 32px 0;
     }
-    .image-block img { /* General image block styling */
+    .image-block img {
       width: 100%;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
-    .caption { /* Original general caption style */
+    .caption {
       text-align: center;
       font-size: 0.875rem;
-      color: #9ca3af; /* Original caption color */
+      color: #9ca3af;
       margin-top: 8px;
     }
     .button-wrapper {
@@ -118,98 +119,61 @@
     .button:hover {
       background-color: #a60f17;
     }
-    .tooltip {
-      display: none;
-      position: absolute;
-      background-color: #fff;
-      border: 1px solid #d1d5db;
-      padding: 12px 16px;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      color: var(--text);
-      max-width: 260px;
-      width: max-content;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      z-index: 1000;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
-      white-space: normal;
-      box-sizing: border-box;
-    }
 
-    /* CAROUSEL STYLES - INTEGRATED FROM MODERN CAROUSEL */
-    .carousel { /* This class is on .image-block.carousel */
+    .carousel {
       position: relative;
-      /* max-width: 700px; /* Adjust as needed, original .container is 680px */
       width: 100%;
       overflow: hidden;
-      border-radius: var(--carousel-radius); /* Uses new var */
+      border-radius: var(--carousel-radius);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      margin: 32px 0; /* Keep original margin if .image-block is the .carousel */
+      margin: 32px 0;
     }
-
     .carousel-inner {
       display: flex;
       transition: transform 0.5s ease-in-out;
     }
-
     .carousel-slide {
       min-width: 100%;
-      display: flex; /* Ensure slides are flex for content alignment */
+      display: flex;
       flex-direction: column;
       align-items: center;
-      /* Remove 'active' class specific display, transform handles it */
     }
-
     .carousel-slide img {
       width: 100%;
       height: auto;
       display: block;
-      /* border-radius: var(--carousel-radius) var(--carousel-radius) 0 0; /* Original image block already has radius */
-      border-radius: 0; /* Remove radius if caption has full width bg */
-      /* The original .image-block img already has border-radius: 12px.
-         If the caption is part of the slide *below* the image,
-         the image might need top-left and top-right radius,
-         and the caption block bottom-left and bottom-right.
-         For simplicity, we'll let image keep its original radius if caption is separate,
-         or adjust if caption becomes visually part of the slide block.
-      */
+      border-radius: 0; /* Resimlerin köşeleri artık caption ile bütünleşik olacağı için sıfırlandı */
     }
-    
-    /* Styling for caption specifically within the carousel */
     .carousel-slide .caption {
       padding: 12px 16px;
-      background-color: var(--carousel-accent-light); /* --accent-bg equivalent */
-      color: var(--carousel-text); /* New carousel text color */
-      font-size: 1rem; /* New carousel caption font size */
+      background-color: var(--carousel-accent-light);
+      color: var(--carousel-text);
+      font-size: 1rem;
       width: 100%;
       text-align: center;
-      border-radius: 0 0 var(--carousel-radius) var(--carousel-radius);
-      margin-top: 0; /* Remove default margin if it's part of the slide block */
+      border-radius: 0 0 var(--carousel-radius) var(--carousel-radius); /* Sadece alt köşelere yuvarlaklık */
+      margin-top: 0;
     }
-
-
     .carousel-controls {
       position: absolute;
-      top: 45%; /* Adjusted slightly from 50% due to caption height potentially affecting visual center for image */
+      top: 45%; /* Caption yüksekliğine göre ayarlandı */
       width: 100%;
       display: flex;
       justify-content: space-between;
       transform: translateY(-50%);
       padding: 0 12px;
       pointer-events: none;
-      z-index: 2; /* Ensure controls are above slides */
+      z-index: 2;
     }
-
     .carousel-controls button {
       pointer-events: all;
       background: rgba(255, 255, 255, 0.85);
-      color: var(--accent); /* Use main accent color */
+      color: var(--accent);
       border: 1px solid var(--accent);
       width: 38px;
       height: 38px;
-      border-radius: 8px; /* New radius for buttons */
-      font-size: 1.2rem; /* New font size */
+      border-radius: 8px;
+      font-size: 1.2rem;
       font-weight: bold;
       display: flex;
       align-items: center;
@@ -218,13 +182,11 @@
       transition: background 0.3s ease, transform 0.2s ease, color 0.3s ease;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
-
     .carousel-controls button:hover {
       background: var(--accent);
       color: #fff;
       transform: scale(1.1);
     }
-
   </style>
 </head>
 <body>
@@ -252,21 +214,28 @@
     <p>Tandır fırınını ilk düşünen Hintli dostumuz o gün başka bir şeyle meşgul olsaydı? Yeryüzü fırınlarına tamah edecektik el mecbur. <strong>30.000 yıl evvel</strong> atalarımız toprağı kazar, kızdırdıkları taşları çukura atar, yemeklerini yanmasın diye yapraklara sarıp taşların üzerine bırakır ve çukuru geri doldururmuş. Günümüzde bir testi yemek yapmak için çukur kazmak akıl alır gibi değil tabii.</p>
     
     <h2>Peki ya günümüzün son teknolojileri?</h2>
-    <p>İyi ki insanlık mutfak çözümlerini geliştirmekten hiç vazgeçmedi. <strong data-tip="3D Fry, sıcak hava sirkülasyonu ile çok az yağla sağlıklı kızartma yapar." data-slide="0">3D Fry</strong>
-    mesela. Ya da yiyeceklerin besin değerlerini koruyan <strong data-tip="Steam Function Plus, yiyeceklerin içindeki vitamin ve mineralleri korur." data-slide="1">Steam Function Plus</strong>
-    . Kekiniz en iyi kıvama ulaştığında fırınınızı otomatik kapatan <strong data-tip="PerfectBake Plus, kekin içindeki nemi ölçerek fırını en doğru anda otomatik kapatır." data-slide="2">PerfectBake Plus</strong>
+    <p>İyi ki insanlık mutfak çözümlerini geliştirmekten hiç vazgeçmedi. <strong data-slide="0">3D Fry</strong>
+    mesela. Ya da yiyeceklerin besin değerlerini koruyan <strong data-slide="1">Steam Function Plus</strong>
+    . Kekiniz en iyi kıvama ulaştığında fırınınızı otomatik kapatan <strong data-slide="2">PerfectBake Plus</strong>
     ’a ne demeli?</p>
     
-    <div class="image-block carousel"> <div class="carousel-inner"> <div class="carousel-slide"> <img src="https://static.bundle.app/studio/d3f80cfe-48f3-4036-8a12-71aeabc64514/af31b54a-9191-4d35-9a84-92df6cdc204a.png" alt="3D Fry">
+    <div class="image-block carousel">
+      <div class="carousel-inner">
+        <div class="carousel-slide">
+          <img src="https://static.bundle.app/studio/d3f80cfe-48f3-4036-8a12-71aeabc64514/af31b54a-9191-4d35-9a84-92df6cdc204a.png" alt="3D Fry">
           <div class="caption">3D Fry sayesinde artık litrelerce yağ kullanmadan, mükemmel patates ve sebze kızartmaları yapmak oldukça pratik.</div>
         </div>
-        <div class="carousel-slide"> <img src="https://static.bundle.app/studio/d3f80cfe-48f3-4036-8a12-71aeabc64514/fd0cebfe-b4c8-4e71-9d02-21f1bda27b50.png" alt="Steam Function">
+        <div class="carousel-slide">
+          <img src="https://static.bundle.app/studio/d3f80cfe-48f3-4036-8a12-71aeabc64514/fd0cebfe-b4c8-4e71-9d02-21f1bda27b50.png" alt="Steam Function">
           <div class="caption">Steam Function Plus ile pişirme sıcaklığını 120°C'ye kadar yükselterek, yemeklerinizi daha hızlı bir şekilde pişirebilir.</div>
         </div>
-        <div class="carousel-slide"> <img src="https://static.bundle.app/studio/d3f80cfe-48f3-4036-8a12-71aeabc64514/1eb33b93-f5e5-4160-82f6-6a9e33d1d0ea.png" alt="PerfectBake">
+        <div class="carousel-slide">
+          <img src="https://static.bundle.app/studio/d3f80cfe-48f3-4036-8a12-71aeabc64514/1eb33b93-f5e5-4160-82f6-6a9e33d1d0ea.png" alt="PerfectBake">
           <div class="caption">PerfectBake özelliği sayesinde kolaylıkla mükemmel pişmiş ekmek, kek, kiş ve benzeri lezzetler hazırlayabilirsiniz.</div>
         </div>
-      </div> <div class="carousel-controls">
+      </div>
+
+      <div class="carousel-controls">
         <button class="prev">&#8592;</button>
         <button class="next">&#8594;</button>
       </div>
@@ -276,38 +245,9 @@
     <div class="button-wrapper">
       <a class="button" href="https://ad.doubleclick.net/ddm/trackclk/N2054846.3735144BUNDLEAPP/B32486569.406791996" target="_blank">Hemen Keşfet</a>
     </div>
-  </div> <div class="tooltip" id="tooltip"></div>
+  </div>
 
   <script>
-    // Tooltip Script
-    const tooltip = document.getElementById('tooltip');
-    document.querySelectorAll('[data-tip]').forEach(el => {
-      el.addEventListener('mouseenter', () => {
-        tooltip.textContent = el.dataset.tip;
-        tooltip.style.display = 'block';
-        const rect = el.getBoundingClientRect();
-        // Calculate available space and adjust tooltip position
-        let offsetTop = rect.top + rect.height + window.scrollY + 6;
-        let offsetLeft = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2); // Center tooltip
-
-        // Adjust if tooltip goes off screen
-        if (offsetTop + tooltip.offsetHeight > window.innerHeight + window.scrollY - 10) { // Check bottom
-            offsetTop = rect.top + window.scrollY - tooltip.offsetHeight - 6; // Position above
-        }
-        if (offsetLeft < 10) { // Check left
-            offsetLeft = 10;
-        } else if (offsetLeft + tooltip.offsetWidth > window.innerWidth - 10) { // Check right
-            offsetLeft = window.innerWidth - tooltip.offsetWidth - 10;
-        }
-        
-        tooltip.style.top = `${offsetTop}px`;
-        tooltip.style.left = `${offsetLeft}px`;
-      });
-      el.addEventListener('mouseleave', () => {
-        tooltip.style.display = 'none';
-      });
-    });
-
     // Progress Bar Script
     const progressBar = document.getElementById('progress-bar');
     window.addEventListener('scroll', () => {
@@ -317,7 +257,7 @@
       progressBar.style.width = `${scrollPercent}%`;
     });
 
-    // Carousel Script (Integrated "Modern Carousel" logic)
+    // Carousel Script
     const carouselInner = document.querySelector('.carousel-inner');
     const carouselSlides = document.querySelectorAll('.carousel-slide');
     const totalCarouselSlides = carouselSlides.length;
@@ -328,11 +268,10 @@
       if (carouselInner) {
         carouselInner.style.transform = `translateX(${offset}%)`;
       }
-      // Optional: Update active class for other purposes if needed, but not for visibility
       carouselSlides.forEach((slide, i) => {
-        slide.classList.remove('active'); // 'active' class is not used for transform sliding visibility
+        slide.classList.remove('active');
         if (i === index) {
-          slide.classList.add('active'); // Can be used for other styling or identifying current slide
+          slide.classList.add('active');
         }
       });
     }
@@ -352,7 +291,6 @@
         });
     }
 
-
     // Link [data-slide] elements to carousel
     document.querySelectorAll('[data-slide]').forEach(el => {
       el.addEventListener('click', () => {
@@ -364,7 +302,6 @@
       });
     });
     
-    // Initialize carousel to show the first slide
     if (totalCarouselSlides > 0) {
         showCarouselSlide(currentCarouselIndex);
     }
