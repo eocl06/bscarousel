@@ -71,20 +71,18 @@
       font-family: 'Inter', sans-serif;
     }
     p strong {
-      color: var(--text); 
+      color: var(--text);  
       font-weight: 600;
-      background-color: transparent; 
+      background-color: transparent;  
       padding: 0 2px;
       border-radius: 4px;
-      cursor: pointer; 
       position: relative;
     }
-
-    /* data-slide olan strong etiketlerine özel stil */
     p strong[data-slide] {
-      color: var(--accent); /* Kırmızı metin rengi */
-      background-color: var(--accent-bg); /* Açık kırmızı arka plan */
-      padding: 0 4px; /* Vurgulu elemanlar için önceki dolgu miktarı */
+      color: var(--accent);
+      background-color: var(--accent-bg);
+      padding: 0 4px;
+      cursor: pointer;
     }
 
     .image-block {
@@ -95,7 +93,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     }
-    .caption {
+    .caption { /* Genel resim altı yazıları için */
       text-align: center;
       font-size: 0.875rem;
       color: #9ca3af;
@@ -131,6 +129,10 @@
     .carousel-inner {
       display: flex;
       transition: transform 0.5s ease-in-out;
+      user-select: none;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
     }
     .carousel-slide {
       min-width: 100%;
@@ -142,21 +144,21 @@
       width: 100%;
       height: auto;
       display: block;
-      border-radius: 0; /* Resimlerin köşeleri artık caption ile bütünleşik olacağı için sıfırlandı */
+      border-radius: 0;
     }
-    .carousel-slide .caption {
-      padding: 12px 16px;
+    .carousel-slide .caption { /* Carousel içindeki özel caption */
+      padding: 1px 16px;
       background-color: var(--carousel-accent-light);
       color: var(--carousel-text);
       font-size: 1rem;
       width: 100%;
       text-align: center;
-      border-radius: 0 0 var(--carousel-radius) var(--carousel-radius); /* Sadece alt köşelere yuvarlaklık */
-      margin-top: 0;
+      border-radius: 0 0 var(--carousel-radius) var(--carousel-radius); /* Sadece alt köşeler yuvarlak */
+      margin-top: 0; /* Resimle bitişik olması için */
     }
     .carousel-controls {
       position: absolute;
-      top: 45%; /* Caption yüksekliğine göre ayarlandı */
+      top: 50%;
       width: 100%;
       display: flex;
       justify-content: space-between;
@@ -185,7 +187,41 @@
     .carousel-controls button:hover {
       background: var(--accent);
       color: #fff;
+      transform: scale(1.1) translateY(-50%); /* Dikey ortalamayı koru */
+    }
+
+    /* Carousel Noktaları Stilleri - YENİDEN AYARLANDI */
+    .carousel-dots {
+      position: absolute;
+      /* Altyazının (caption) yaklaşık yüksekliği ~55-60px. 
+         Noktaların altyazının hemen üzerinde durması için bu değeri ayarlayın.
+         Örn: Altyazı 60px ise, noktalar için bottom: 65px veya 70px gibi bir değer. */
+      bottom: 60px; /* BU DEĞERİ KENDİ ALTYAZI YÜKSEKLİĞİNİZE GÖRE AYARLAYIN! */
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 3; /* Kontrollerin üzerinde olabilir */
+      padding: 5px 0; /* Dikeyde kendi içinde biraz boşluk */
+    }
+    .carousel-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin: 0 4px;
+      background-color: rgba(255, 255, 255, 0.45); /* Yarı şeffaf beyaz */
+      border-radius: 50%;
+      cursor: pointer;
+      border: none; /* Kenarlıksız, görsele daha yakın görünüm */
+      padding: 0;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .carousel-dot:hover {
+      background-color: rgba(255, 255, 255, 0.65); /* Hover'da biraz daha opak */
       transform: scale(1.1);
+    }
+    .carousel-dot.active {
+      background-color: rgba(255, 255, 255, 0.85); /* Aktif nokta daha opak beyaz */
+      transform: scale(1.2);
     }
   </style>
 </head>
@@ -236,9 +272,11 @@
       </div>
 
       <div class="carousel-controls">
-        <button class="prev">&#8592;</button>
-        <button class="next">&#8594;</button>
+        <button class="prev" aria-label="Önceki slayt">&#8592;</button>
+        <button class="next" aria-label="Sonraki slayt">&#8594;</button>
       </div>
+
+      <div class="carousel-dots"></div>
     </div>
 
     <p><strong>Bosch’un Serie 8</strong> ankastre fırın ailesi; kendini temizleme, cep telefonundan kontrol gibi birçok yenilikle fırın tarihinde yeni bir sayfa açıyor.</p>
@@ -258,52 +296,107 @@
     });
 
     // Carousel Script
+    const carousel = document.querySelector('.carousel');
     const carouselInner = document.querySelector('.carousel-inner');
     const carouselSlides = document.querySelectorAll('.carousel-slide');
     const totalCarouselSlides = carouselSlides.length;
     let currentCarouselIndex = 0;
 
+    const dotsContainer = document.querySelector('.carousel-dots');
+    let dots = [];
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const swipeThreshold = 50; 
+
+    function updateDots() {
+      if (!dotsContainer) return;
+      dots.forEach((dot, idx) => {
+        dot.classList.remove('active');
+        if (idx === currentCarouselIndex) {
+          dot.classList.add('active');
+        }
+      });
+    }
+
     function showCarouselSlide(index) {
-      const offset = -index * 100;
+      if (index >= totalCarouselSlides) {
+        currentCarouselIndex = totalCarouselSlides - 1;
+      } else if (index < 0) {
+        currentCarouselIndex = 0;
+      } else {
+        currentCarouselIndex = index;
+      }
+      
+      const offset = -currentCarouselIndex * 100;
       if (carouselInner) {
         carouselInner.style.transform = `translateX(${offset}%)`;
       }
-      carouselSlides.forEach((slide, i) => {
-        slide.classList.remove('active');
-        if (i === index) {
-          slide.classList.add('active');
-        }
-      });
+      updateDots();
     }
 
     const prevButton = document.querySelector('.carousel .prev');
     const nextButton = document.querySelector('.carousel .next');
 
     if (prevButton && nextButton && carouselInner) {
-        prevButton.addEventListener('click', () => {
-        currentCarouselIndex = (currentCarouselIndex - 1 + totalCarouselSlides) % totalCarouselSlides;
-        showCarouselSlide(currentCarouselIndex);
-        });
+      prevButton.addEventListener('click', () => {
+        showCarouselSlide((currentCarouselIndex - 1 + totalCarouselSlides) % totalCarouselSlides);
+      });
 
-        nextButton.addEventListener('click', () => {
-        currentCarouselIndex = (currentCarouselIndex + 1) % totalCarouselSlides;
-        showCarouselSlide(currentCarouselIndex);
-        });
+      nextButton.addEventListener('click', () => {
+        showCarouselSlide((currentCarouselIndex + 1) % totalCarouselSlides);
+      });
     }
 
-    // Link [data-slide] elements to carousel
+    if (dotsContainer && totalCarouselSlides > 0) {
+      for (let i = 0; i < totalCarouselSlides; i++) {
+        const dot = document.createElement('button');
+        dot.classList.add('carousel-dot');
+        dot.setAttribute('aria-label', `${i + 1}. slayda git`);
+        dot.addEventListener('click', () => {
+          showCarouselSlide(i);
+        });
+        dotsContainer.appendChild(dot);
+        dots.push(dot);
+      }
+    }
+
     document.querySelectorAll('[data-slide]').forEach(el => {
       el.addEventListener('click', () => {
         const slideIndex = parseInt(el.getAttribute('data-slide'), 10);
         if (!isNaN(slideIndex) && slideIndex >= 0 && slideIndex < totalCarouselSlides) {
-          currentCarouselIndex = slideIndex;
-          showCarouselSlide(currentCarouselIndex);
+          showCarouselSlide(slideIndex);
+          if (carousel) {
+            carousel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
         }
       });
     });
     
+    if (carouselInner) {
+      carouselInner.addEventListener('touchstart', (event) => {
+        touchStartX = event.changedTouches[0].screenX;
+      }, { passive: true });
+
+      carouselInner.addEventListener('touchend', (event) => {
+        touchEndX = event.changedTouches[0].screenX;
+        handleSwipe();
+      });
+    }
+
+    function handleSwipe() {
+      const deltaX = touchEndX - touchStartX;
+      if (Math.abs(deltaX) > swipeThreshold) {
+        if (deltaX > 0) { 
+          showCarouselSlide(currentCarouselIndex - 1);
+        } else { 
+          showCarouselSlide(currentCarouselIndex + 1);
+        }
+      }
+    }
+
     if (totalCarouselSlides > 0) {
-        showCarouselSlide(currentCarouselIndex);
+      showCarouselSlide(currentCarouselIndex);
     }
   </script>
 </body>
