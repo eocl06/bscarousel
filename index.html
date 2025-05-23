@@ -99,8 +99,8 @@
       color: #9ca3af;
       margin-top: 8px;
     }
-    /* .button-wrapper kaldırıldı, stilleri .unified-cta-block'a taşındı */
-    .button { /* Genel buton stili */
+    /* .button-wrapper kaldırıldı */
+    .button { 
       background-color: var(--accent);
       color: white;
       padding: 12px 32px;
@@ -110,7 +110,7 @@
       text-decoration: none;
       box-shadow: 0 2px 6px rgba(210, 21, 28, 0.2);
       transition: all 0.3s ease;
-      display: inline-block; /* text-align:center ile ortalanabilmesi için */
+      display: inline-block; 
     }
     .button:hover {
       background-color: #a60f17;
@@ -249,19 +249,16 @@
       box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
       position: relative; 
     }
-
     .survey-sponsor { 
       position: absolute;
       top: 18px; 
       right: 22px; 
     }
-
     .survey-sponsor img { 
       max-width: 40px; 
       height: auto;
       display: block; 
     }
-
     .survey-container h3 {
       font-family: 'Playfair Display', serif;
       font-size: 1.7rem;
@@ -272,7 +269,6 @@
       margin-top: 0; 
       margin-bottom: 25px;
     }
-
     .survey-container h3::after {
       content: '';
       display: block;
@@ -282,7 +278,6 @@
       border-radius: 1.5px;
       margin: 0 auto;
     }
-
     .survey-question {
       font-family: 'Inter', sans-serif;
       font-size: 1.05rem;
@@ -290,7 +285,6 @@
       margin-bottom: 30px;
       line-height: 1.65;
     }
-
     .survey-options {
       list-style: none;
       padding: 0;
@@ -300,7 +294,6 @@
       flex-direction: column;
       gap: 10px;
     }
-
     .survey-options li button {
       display: block;
       width: 100%;
@@ -317,14 +310,12 @@
       text-align: center;
       box-shadow: 0 2px 4px rgba(0,0,0,0.03);
     }
-
     .survey-options li button:hover:not(:disabled) {
       background-color: #fef7f7;
       border-color: #f8c9cc;
       transform: translateY(-2px) scale(1.01);
       box-shadow: 0 5px 10px rgba(0,0,0,0.06);
     }
-
     .survey-options li button.selected {
       background-color: var(--accent);
       color: #fff;
@@ -333,14 +324,12 @@
       box-shadow: 0 3px 7px rgba(210, 21, 28, 0.25);
       transform: translateY(0) scale(1);
     }
-
     .survey-options li button:disabled {
       opacity: 0.85;
       cursor: not-allowed;
       transform: none;
       box-shadow: 0 2px 4px rgba(0,0,0,0.03);
     }
-
     .survey-options li button.selected:disabled {
       opacity: 1;
     }
@@ -348,33 +337,52 @@
       display: none !important;
     }
 
-    /* YENİ BİRLEŞİK CTA BLOĞU STİLLERİ */
-    .unified-cta-block {
-      background-color: var(--accent-bg); /* #ffeaea */
-      padding: 35px 30px;
-      border-radius: var(--carousel-radius);
-      margin: 40px auto 30px auto;
+    /* YENİ PREMIUM CTA BLOK STİLLERİ */
+    .premium-cta-block {
+      background-color: #ffffff; 
+      border-radius: var(--carousel-radius, 12px); 
+      padding: 35px 40px 40px 40px; 
+      margin: 50px auto 30px auto; 
       text-align: center;
-      box-shadow: 0 5px 15px rgba(210, 21, 28, 0.15); 
-      border-top: 4px solid var(--accent);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.08), 0 5px 15px rgba(0,0,0,0.06); 
+      border-top: 4px solid var(--accent); 
+      position: relative; 
+      overflow: hidden; 
     }
-
-    .unified-cta-block .cta-text {
-      font-family: 'Inter', sans-serif;
-      font-size: 1.15rem; 
-      line-height: 1.8;
+    .premium-cta-block .cta-heading {
+      font-family: 'Playfair Display', serif; 
+      font-size: 1.9rem; 
       color: var(--text); 
-      margin-bottom: 25px; 
+      font-weight: 700;
+      margin-bottom: 18px; 
+      line-height: 1.3;
     }
-
-    .unified-cta-block .cta-text strong {
-      color: var(--accent); 
-      font-weight: 700; 
+    .premium-cta-block .cta-paragraph {
+      font-family: 'Inter', sans-serif; 
+      font-size: 1.1rem; 
+      color: var(--muted); 
+      line-height: 1.75;
+      margin-left: auto; 
+      margin-right: auto;
+      margin-bottom: 30px; 
+      max-width: 560px; 
     }
-
-    .unified-cta-block .button.cta-button { /* .button stilini alır, gerekirse özel ayar */
-      font-size: 1rem; /* Buton metnini biraz büyüttük */
-      /* padding: 14px 35px; // Buton padding'i zaten .button'dan geliyor, gerekirse buradan ezin */
+    .premium-cta-block .cta-paragraph strong {
+      color: var(--text); 
+      font-weight: 600;
+    }
+    .premium-cta-block .button.cta-button-premium {
+      padding: 14px 40px; 
+      font-size: 1.05rem; 
+      font-weight: 500; 
+      /* Diğer .button stillerini alır */
+      transition: all 0.3s ease; 
+    }
+    .premium-cta-block .button.cta-button-premium:hover {
+      /* .button:hover stilini alır, üzerine yazmak gerekirse: */
+      /* background-color: #a60f17; */
+      transform: translateY(-3px); 
+      box-shadow: 0 6px 12px rgba(210, 21, 28, 0.35); 
     }
 
   </style>
@@ -450,9 +458,10 @@
 
     <p><strong>Bosch’un Serie 8</strong> ankastre fırın ailesi; kendini temizleme, cep telefonundan kontrol gibi birçok yenilikle fırın tarihinde yeni bir sayfa açıyor.</p>
     
-    <div class="unified-cta-block">
-      <p class="cta-text">Mutfakta <strong>devrim yaratan</strong> Bosch Serie 8 fırınlarla tanışın, hayalinizdeki lezzetlere bir adım daha yaklaşın! Teknolojinin ve tasarımın <strong>mükemmel uyumu</strong> şimdi sizi bekliyor.</p>
-      <a class="button cta-button" href="https://ad.doubleclick.net/ddm/trackclk/N2054846.3735144BUNDLEAPP/B32486569.406791996" target="_blank">Hemen Keşfet</a>
+    <div class="premium-cta-block">
+      <h3 class="cta-heading">Geleceğin Fırın Teknolojisiyle Tanışın!</h3>
+      <p class="cta-paragraph">Mutfakta devrim yaratan Bosch Serie 8 fırınlarla <strong>mükemmel lezzetlere</strong> ulaşmak artık çok daha keyifli. Teknolojinin ve tasarımın eşsiz uyumunu deneyimleyin.</p>
+      <a class="button cta-button-premium" href="https://ad.doubleclick.net/ddm/trackclk/N2054846.3735144BUNDLEAPP/B32486569.406791996" target="_blank">Hemen Keşfet &rarr;</a>
     </div>
 
   </div>
